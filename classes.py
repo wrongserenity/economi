@@ -2,40 +2,52 @@ import sqlite3
 
 
 class Player:
-    """Class of counties"""
-    def __init__(self, name, m_r_cur, st_fund):
-        """Initiate starting parameters"""
+    """Class of players"""
+    def __init__(self, id, name, m_r_cur, st_fund):
+        """Initiate starting parameters: id, name, """
+        self.id = id
         self.name = name                        # player's name
-        self.main_ratio_currency = m_r_cur      # ratio to main currency
-        self.fund = dict([(own, st_fund), (another_1, 0), (another_2, 0), (another_3, 0)])
+        self.ratio = float(count_ratio(id))      # ratio to main currency
+        self.main_fund_old
+        self.fund = dict([(id, st_fund), (abs(id - 1), 0), (abs(id - 2), 0), (abs(id - 3), 0)])     # dictionary of
         self.info_country = dict([(n, self.name), (s_m_r_c, self.main_ratio_currency), (f, self.fund)])   #
         # creating parameter dictionary of country
 
     def check_status(self):
         """Printing all information about country"""
         self.fund = self.count_fund()
-        self.main_ratio_currency =
-        self.info_country = dict([(n, self.name), (s_m_r_c, self.main_ratio_currency), (f, self.fund)])  #
+         #
         print(self.info_country)
 
-    def count_fund(self):
+    def count_fund_new(self):
         """Count fund of county"""
-        return self.fund[own] + self.fund[another_1] * ratio_another_1 + self.fund[another_2] * ratio_another_2 + self.fund[another_3] * ratio_another_3
+        return sum(self.fund[i] * count_ratio_old[i] for i in range(1,5))
 
-    def count_ratio(self):
-        """Count ratio of country"""
 
     def purchase_currency_on_own(self, num_player, value, ratio):
         """Buying currency from another county"""
 
-        self.fund += (self.fund[player[num_player]] - value) * player_ratio[num_player]
+        self.fund += (self.fund.[ - value) * player_ratio[num_player]
 
 class Unit:
     pass
 
 
-class Values:
-    pass
+
+def count_ratio_new(id):
+
+
+def count_ratio_for_n_player(id):
+    half_sum = sum(main_fund_old[x] for x in range(1, 5)) / 2
+
+
+
+main_fund_old = {1: 1.fund[1]}
+
+
+
+
+
 
 
 player = {1: player1, 2: player2, 3: player3, 4: player4}
