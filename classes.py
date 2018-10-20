@@ -4,21 +4,24 @@ import sqlite3
 class Player:
     """Class of players"""
     def __init__(self, p_id, nm, st_fund):
-        """Initiate starting parameters: id, name, """
+        """Initiate starting parameters: id, name, fund in starting"""
         self.player_id = p_id
         self.name = nm                        # player's name
         self.fund = st_fund
         self.units = {}
-        self.info_country = {'id': self.player_id, 'name': self.name, 'units': self.units, 'fund': self.fund}
+
+    def get_info(self):
+        return {'id': self.player_id, 'name': self.name, 'units': self.units, 'fund': self.fund}
 
     def check_status(self):
         """Printing all information about country"""
-        print(self.info_country)
+        print(self.get_info)
 
     def start_making_unit(self):
-        pass
 
-    def creating_unit
+
+    def creating_unit(self):
+        pass
 
 
 class Unit(self):
