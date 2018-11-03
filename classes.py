@@ -23,14 +23,14 @@ class Player:
             set_data(self)
             self.units = []
             return
+        else:
+            self.id_ = id_
+            for key, val in get_data(self.id_).item():
+                self.__setattr__(key, val)
+            self.units = [Unit(data=data) for data in get_units(self.id_)]
 
-        self.id_ = id_
-        for key, val in get_data(self.id_):
-            self.__setattr__(key, val)
-        self.units = [Unit(data=data) for data in get_units(self.id_)]
-
-
-
+    def save(self):
+        set_data(self)
 
     def income_fund(self, profit):
         self.fund += profit
@@ -51,13 +51,14 @@ class Player:
 
 
 class UnitMaker:
-    def __init__
+    def __init__(self):
+        id_ = uuid.uuid4()
 
 
 class Unit:
     def __init__(self, id_=None, cast_time=None, cast_cost=None, st_prod=None, data=None):
         if data:
-            for key, val in data:
+            for key, val in data.items():
                 self.__setattr__(key, val)
                 return
         self.identifier = id_
@@ -70,14 +71,7 @@ class Unit:
 
     def remove(self):
         pass
-
-    def next_move(self):
-        if self.steps_to_create != 0:
-            self.steps_to_create -= 1
-        else:
-            Player.income_fund(productivity) ????????????????????????
             
-
 
 class Game:
     def __init__(self):
@@ -86,4 +80,13 @@ class Game:
 
 class Market:
     def __init__(self):
+        self.units_to_sell = {}
+        self.units = {}         # разберись
+    
+    def buy(self):
         pass
+
+    def sell(self):
+        pass
+
+    def process(self):
