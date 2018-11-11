@@ -48,6 +48,10 @@ class Player:
         self.count_units -= 1
         self.units
         pass
+    
+    # TODO: what about order?
+    def get_values(self):
+        return list(self.__dict__.values())
 
 
 class UnitMaker:
@@ -71,6 +75,9 @@ class Unit:
 
     def remove(self):
         pass
+    
+    def to_dict(self):
+        return self.__dict__
             
 
 class Game:
