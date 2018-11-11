@@ -17,7 +17,7 @@ from pymongo import MongoClient
         return self.collection.count_documents({"owner_id": owner_id})
     
     def update_unit(self, unit_id, updates):
-        self.collection.update_one({"unit_id": unit_id}, {$set: updates})
+        self.collection.update_one({"unit_id": unit_id}, {"$set": updates})
         
     def close_connection(self):
         self.client.close()
