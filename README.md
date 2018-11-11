@@ -1,4 +1,8 @@
-# Economic client/server game, based on PyQt + Twisted
+# Ecónomi
+## Economic client/server game, based on PyQt + Twisted
+
+# Interface
+![Interface](https://https://github.com/wrongserenity/project/blob/master/interface.png)
 
 ## Server
 - `MongoDB for storing units and other frequently-changing data`
@@ -35,5 +39,3 @@
 
 # Architecture(v0.1):
 - `To be done...`
-
-  
