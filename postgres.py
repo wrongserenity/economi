@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2 as pg
 import logging
 
 # TODO: add try:.. except... wrappers
@@ -10,7 +10,7 @@ class PostgresConnection:
             logging.critical("%s occurred while connecting PostgreSQL Database" % str(e))
     
     def cursor(self):
-        return self.__conn.cur()
+        return self.__conn.cursor()
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
@@ -23,16 +23,25 @@ class PostgresConnection:
     def get_data(self, user_id):
         with self.cursor() as cur:
             cur.execute("FROM users_table SELECT * WHERE user_id = %d", (user_id, ))
-            
+            return cur.fetchone()
+
+    def check_hash(self, login, hash_):
+        pass
+
     def get_many(self, user_id_list):
         with self.cursor() as cur:
             cur.prepare("FROM users_table SELECT * WHERE user_id = %d")
             for user_id in user_id_list:
                 cur.execute(user_id)
+                return cur.fetchall()
                 
     # TODO: update number of values
     # TODO: should return dict
     def set_data(self, user_obj):
         with self.cursor() as cur:
             cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_obj.get_values())
-                    
+
+
+
+
+

@@ -66,9 +66,9 @@ class Unit:
                 self.__setattr__(key, val)
                 return
         self.identifier = id_
-        self.steps_to_create = steps_to_create
-        self.productivity = st_productivity
-        self.spend_resources = st_spend_resources
+        self.steps_to_create = cast_time
+        self.productivity = st_prod
+        self.cast_cost = cast_cost
 
     def lvl_up(self):
         pass
