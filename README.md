@@ -1,6 +1,8 @@
 # Ecónomi
  Economic client/server game, based on PyQt + Twisted
-
+## Gameplay
+- Грабим корованы
+ 
 ## Interface
 ![Interface](https://github.com/wrongserenity/project/blob/master/interface.png)
 
