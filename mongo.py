@@ -1,7 +1,8 @@
 from pymongo import MongoClient
 
+
 # TODO: write try:.. except.. wrappers
-сlass MongoConnection:
+class MongoConnection:
     def __init__(self, db_name, col_name, **mongo_configs):
         self.client = MongoClient(**mongo_configs)
         self.db = self.client[db_name]
@@ -18,7 +19,9 @@ from pymongo import MongoClient
     
     def update_unit(self, unit_id, updates):
         self.collection.update_one({"unit_id": unit_id}, {"$set": updates})
+
+    def remove_unit(self, unit_id):
+        self.collection.delete_one({'unit_id': unit_id})
         
     def close_connection(self):
         self.client.close()
-        

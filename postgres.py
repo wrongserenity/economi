@@ -1,6 +1,7 @@
 import psycopg2 as pg
 import logging
 
+
 # TODO: add try:.. except... wrappers
 class PostgresConnection:
     def __init__(self, configs):
@@ -39,7 +40,7 @@ class PostgresConnection:
     # TODO: should return dict
     def set_data(self, user_obj):
         with self.cursor() as cur:
-            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_obj.get_values())
+            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_obj.get_values()))
 
 
 
