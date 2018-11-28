@@ -42,87 +42,117 @@
     <session id="591468195">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.1" value="2" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.1" value="3" />
+          <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="326" />
-          <entry key="py" value="537" />
+          <entry key="py" value="1468" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="863" />
+          <entry key="Python" value="1794" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="2" />
+          <entry key="py" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="2" />
+          <entry key="Python" value="4" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/classes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-                <marker date="1542976249234" expanded="true" signature="1261:1340" ph="..." />
-                <marker date="1542976249234" expanded="true" signature="1900:2047" ph="..." />
-                <marker date="1542976249234" expanded="true" signature="2064:2127" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/const.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mongo.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
-              <folding>
-                <marker date="1542976249266" expanded="true" signature="759:830" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/postgres.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
-                <marker date="1542983885913" expanded="true" signature="919:938" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/classes.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="391">
+                  <caret line="107" column="27" selection-start-line="107" selection-start-column="27" selection-end-line="107" selection-end-column="27" />
+                  <folding>
+                    <element signature="e#0#11#0" expanded="true" />
+                    <marker date="1543444518311" expanded="true" signature="1328:1407" ph="..." />
+                    <marker date="1543444518311" expanded="true" signature="1897:2044" ph="..." />
+                    <marker date="1543444518311" expanded="true" signature="2061:2124" ph="..." />
+                    <marker date="1543444518311" expanded="true" signature="2254:2282" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/const.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="17">
+                  <caret line="1" selection-start-line="1" selection-end-line="1" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/mongo.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="459">
+                  <caret line="27" selection-start-line="27" selection-end-line="27" />
+                  <folding>
+                    <marker date="1542976249266" expanded="true" signature="759:830" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/postgres.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="34">
+                  <caret line="3" selection-start-line="3" selection-end-line="3" />
+                  <folding>
+                    <element signature="e#0#21#0" expanded="true" />
+                    <marker date="1542983885913" expanded="true" signature="919:938" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/postgres.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="51">
+                  <caret line="3" selection-start-line="3" selection-end-line="3" />
+                  <folding>
+                    <element signature="e#0#21#0" expanded="true" />
+                    <marker date="1542983885913" expanded="true" signature="919:938" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/gS.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-16997" />
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -139,8 +169,8 @@
       <list>
         <option value="$PROJECT_DIR$/const.py" />
         <option value="$PROJECT_DIR$/mongo.py" />
-        <option value="$PROJECT_DIR$/classes.py" />
         <option value="$PROJECT_DIR$/postgres.py" />
+        <option value="$PROJECT_DIR$/classes.py" />
       </list>
     </option>
   </component>
@@ -184,6 +214,34 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="classes" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/classes.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.classes" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -208,19 +266,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15964173" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39914164" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.15343347" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32939914" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32939914" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32939914" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32939914" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -234,13 +293,14 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/classes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+        <state relative-caret-position="391">
+          <caret line="107" column="27" selection-start-line="107" selection-start-column="27" selection-end-line="107" selection-end-column="27" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1542976249234" expanded="true" signature="1261:1340" ph="..." />
-            <marker date="1542976249234" expanded="true" signature="1900:2047" ph="..." />
-            <marker date="1542976249234" expanded="true" signature="2064:2127" ph="..." />
+            <marker date="1543444518311" expanded="true" signature="1328:1407" ph="..." />
+            <marker date="1543444518311" expanded="true" signature="1897:2044" ph="..." />
+            <marker date="1543444518311" expanded="true" signature="2061:2124" ph="..." />
+            <marker date="1543444518311" expanded="true" signature="2254:2282" ph="..." />
           </folding>
         </state>
       </provider>
@@ -264,13 +324,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/postgres.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
+        <state relative-caret-position="51">
           <caret line="3" selection-start-line="3" selection-end-line="3" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
             <marker date="1542983885913" expanded="true" signature="919:938" ph="..." />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-16997" />
       </provider>
     </entry>
   </component>
