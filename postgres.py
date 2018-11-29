@@ -41,8 +41,3 @@ class PostgresConnection:
     def set_data(self, user_obj):
         with self.cursor() as cur:
             cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_obj.get_values()))
-
-
-
-
-
