@@ -1,0 +1,1 @@
+pyuic5 g_enter_name.ui -o g_enter_name.py

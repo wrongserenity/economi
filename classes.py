@@ -2,20 +2,28 @@ import uuid
 from mongo import MongoConnection
 from postgres import PostgresConnection
 from unit import unit_coef, level_coef
+import aiohttp
+import config
 
 
 class Connection:
     def __init__(self):
-        pass
+        self.session = aiohttp.ClientSession()
+        self.base_ip = config.SERVER_IP
+        self.base_port = config.SERVER_PORT
+        self.get_id_url = f"{self.base_ip}:{self.base_port}/get_id"
+
+    async def get_uid(self):
+        async with self.session.get(self.get_id) as response:
+            return await response.text()
 
     def load_settings(self):
         pass
 
 
 class Player:
-    def __init__(self, id_=None, name=None, country=None, units=None, start_fund=None, start_gdp=None, ):
+    def __init__(self, id_, name=None, country=None, units=None, start_fund=None, start_gdp=None, ):
         if not id_:
-            id_ = uuid.uuid4()
             # имя игрока, нз зачем оно
             self.name = name
             # страна, выбранная игроком
