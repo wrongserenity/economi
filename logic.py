@@ -19,19 +19,121 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 player_start_data = {}
 
 
+class MarketExchangeUnits:
+    # переменные
+    # label_86 price1
+    # label_87 prod1
+    # label_88 steps1
+    # label_89 level1
+
+    # label_54 price2
+    # label_55 prod2
+    # label_56 steps2
+    # label_57 level2
+
+    # label_58 price3
+    # label_66 prod3
+    # label_67 steps3
+    # label_68 level3
+
+    # label_44 price4
+    # label_47 prod4
+    # label_49 steps4
+    # label_51 level4
+
+    # переход по страницам в Market, Exchange и Units
+    def scroll_up(self, event):
+        pass
+
+    def scroll_down(self, event):
+        pass
+
+    # меняеет данные на те, что должен выводить Market: четыре юнита и
+    # каждый со своими характеристиками
+    # если для вывода не хватает юнита, то делается запрос на сервер для
+    # создания объекта класса юнит
+    # причем, сервер на полурандоме выставляет значения, билзкие к тем,
+    # что написаны в unit.py (в нем прописаны сложности юнита, которые
+    # зависят от момента игры, ведь с ростом фонда появится нужда в более
+    # производительных юнитах)
+    def market_open(self, event):
+        pass
+
+    # аналогичная функция для изменения переменных, выводимых на экран
+    # только тут должны "хранится" данные о юнитах, выставленных на
+    # продажу другими игроками
+    def exchange_open(self, event):
+        pass
+
+    # опять же похожа функция, но выводит доступные игроку юниты
+    def units_open(self, event):
+        pass
+
+    # продажа или покупка юнитов
+    # или поднять уровень юнита / продать
+    def o1(self, event):
+        print('o1')
+        pass
+
+    def x1(self, event):
+        print('x1')
+        pass
+
+    def o2(self, event):
+        print('o2')
+        pass
+
+    def x2(self, event):
+        print('x2')
+        pass
+
+    def o3(self, event):
+        print('o3')
+        pass
+
+    def x3(self, event):
+        print('x3')
+        pass
+
+    def o4(self, event):
+        print('o4')
+        pass
+
+    def x4(self, event):
+        print('x4')
+        pass
+
+
+# это тупо фон, чтобы
 class Background(QtWidgets.QMainWindow, background.Ui_BackGround):
     def __init__(self, parent=None):
         super(Background, self).__init__(parent)
         self.setupUi(self)
 
 
-class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu):
+# окно только с меню игрока (нажатие на игрока слева сверху)
+class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExchangeUnits):
     def __init__(self, parent=None):
         super(PlayerMenu, self).__init__(parent)
         self.setupUi(self)
 
+        # закррытие мен. игрока и открытие обычного меню
         self.label_20.mousePressEvent = self.menu_open
         self.label_4.mousePressEvent = self.player_cl
+
+        # market, echange, units
+        self.label.mousePressEvent = self.market_open
+        self.label_2.mousePressEvent = self.exchange_open
+        self.label_3.mousePressEvent = self.units_open
+
+        self.label_90.mousePressEvent = self.o1
+        self.label_91.mousePressEvent = self.x1
+        self.label_62.mousePressEvent = self.o2
+        self.label_72.mousePressEvent = self.x2
+        self.label_69.mousePressEvent = self.o3
+        self.label_74.mousePressEvent = self.x3
+        self.label_61.mousePressEvent = self.o4
+        self.label_71.mousePressEvent = self.x4
 
     def menu_open(self, event):
         self.pl_and_sr_menu = PlayerAndStandartMenu()
@@ -44,7 +146,8 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu):
         self.close()
 
 
-class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlMenuSt):
+# окно с меню игрока и обычным меню, которое открывается слева снизу
+class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlMenuSt, MarketExchangeUnits):
     def __init__(self, parent=None):
         super(PlayerAndStandartMenu, self).__init__(parent)
         self.setupUi(self)
@@ -53,6 +156,20 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         self.label_63.mousePressEvent = self.menu_hide
 
         self.label_4.mousePressEvent = self.player_cl
+
+        # market, echange, units
+        self.label.mousePressEvent = self.market_open
+        self.label_2.mousePressEvent = self.exchange_open
+        self.label_3.mousePressEvent = self.units_open
+
+        self.label_90.mousePressEvent = self.o1
+        self.label_91.mousePressEvent = self.x1
+        self.label_62.mousePressEvent = self.o2
+        self.label_72.mousePressEvent = self.x2
+        self.label_69.mousePressEvent = self.o3
+        self.label_74.mousePressEvent = self.x3
+        self.label_61.mousePressEvent = self.o4
+        self.label_71.mousePressEvent = self.x4
 
     def player_cl(self, event):
         self.st_menu = StandartMenu()
@@ -68,7 +185,8 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         self.close()
 
 
-class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu):
+# обыное меню с кнопками exit и hide (скрыть меню)
+class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExchangeUnits):
     def __init__(self, parent=None):
         super(StandartMenu, self).__init__(parent)
         self.setupUi(self)
@@ -78,6 +196,20 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu):
         self.label_4.mousePressEvent = self.player_one
         self.label_5.mousePressEvent = self.player_two
         self.label_6.mousePressEvent = self.player_three
+
+        # market, echange, units
+        self.label.mousePressEvent = self.market_open
+        self.label_2.mousePressEvent = self.exchange_open
+        self.label_3.mousePressEvent = self.units_open
+
+        self.label_90.mousePressEvent = self.o1
+        self.label_91.mousePressEvent = self.x1
+        self.label_62.mousePressEvent = self.o2
+        self.label_72.mousePressEvent = self.x2
+        self.label_69.mousePressEvent = self.o3
+        self.label_74.mousePressEvent = self.x3
+        self.label_61.mousePressEvent = self.o4
+        self.label_71.mousePressEvent = self.x4
 
     def player_one(self, event):
         self.player_open()
@@ -102,7 +234,8 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu):
         self.close()
 
 
-class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow):
+# основное окно без открытых меню
+class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
     def __init__(self, parent=None):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
@@ -120,15 +253,18 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow):
         self.label_2.mousePressEvent = self.exchange_open
         self.label_3.mousePressEvent = self.units_open
 
-    def market_open(self, event):
-        pass
+        self.label_90.mousePressEvent = self.o1
+        self.label_91.mousePressEvent = self.x1
+        self.label_62.mousePressEvent = self.o2
+        self.label_72.mousePressEvent = self.x2
+        self.label_69.mousePressEvent = self.o3
+        self.label_74.mousePressEvent = self.x3
+        self.label_61.mousePressEvent = self.o4
+        self.label_71.mousePressEvent = self.x4
 
-    def exchange_open(self, event):
-        pass
-
-    def units_open(self, event):
-        pass
-
+        self.label_52.mousePressEvent = self.scroll_up
+        self.label_53.mousePressEvent = self.scroll_down
+        
     def player_one(self, event):
         self.player_open()
 
@@ -149,6 +285,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow):
         self.close()
 
 
+# окно ввода имени
 class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
     def __init__(self, parent=None):
         super(EnterName, self).__init__(parent)
@@ -175,6 +312,7 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             # тут надо передать даныые из словаря серверу
 
 
+# окно выбора страны
 class EnterCountry(QtWidgets.QMainWindow, g_choose_country.Ui_EnterCountry):
     def __init__(self, parent=None):
         super(EnterCountry, self).__init__(parent)
@@ -221,6 +359,7 @@ class EnterCountry(QtWidgets.QMainWindow, g_choose_country.Ui_EnterCountry):
         self.close()
 
 
+# окно, открывающееся при запуске игры
 class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
     def __init__(self, parent=None):
         super(MainMenu, self).__init__(parent)
