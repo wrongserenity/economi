@@ -5,6 +5,8 @@ from mongo import MongoConnection
 from unit import *
 from country import *
 
+import random
+
 
 class Connection:
     def __init__(self):
@@ -21,18 +23,26 @@ class Connection:
         pass
 
 
-class Player:
-    def __init__(self, id_, name=None, country=None, units=None, start_fund=None, start_gdp=None, ):
+class Player(object):
+    def __init__(self, id_, name, country_, start_value, start_gdp):
         if not id_:
             # имя игрока, нз зачем оно
             self.name = name
             # страна, выбранная игроком
-            self.country = country
+            self.country = country_
             # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
-            self.fund = start_fund
+            # Todo: надо разграничить понятие фонда в пересчете на общую валюту
+            # путь fund - это в пересчете
+            self.fund = 0
             self.gdp = start_gdp
+
+            self.value = start_value
+            self.other_country_value = {}
+
+            # todo: временная чтука для проверки работоспособности
+            self.id_ = str(random.randint(1, 8))
             # сохраненние данных
-            PostgresConnection.set_data()
+            # PostgresConnection.set_data()
             self.units = []
             return
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
@@ -44,38 +54,48 @@ class Player:
                 self.__setattr__(key, val)
             self.units = [Unit(data=data) for data in MongoConnection.get_units(self.id_)]
 
+    # Todo: куда сохранять нз
     def save(self):
         # хз шо с ентим делать, если честно
-        PostgresConnection.set_data(user_obj)
+        # PostgresConnection.set_data(user_obj)
+        pass
 
     # прибавление в фонде при продаже юнита
-    def income_fund(self, profit):
-        self.fund += profit
+    def income_value(self, profit):
+        self.value += profit
 
     # вычитане из фонда при покупке юнита
-    def outlay_fund(self, sum_):
-        self.fund -= sum_
+    def outlay_value(self, sum_):
+        self.value -= sum_
 
     # прибавление юнита
-    def plus_unit(self, cost, ):
+    def plus_unit(self, cost, unit):
         self.fund -= cost
         self.count_units += 1
-        self.units.append()
+        self.units.append(unit)
 
     # удаление юнита при пробдаже/уничтожении
-    def minus_unit(self, cost):
+    def minus_unit(self, cost, unit):
         self.fund += cost
         self.count_units -= 1
-        self.units
+        self.units.remove(unit)
         pass
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
-        return sum([unit.productivity for unit in self.units]) + self.gdp
+        return sum([unit.productivity for unit in self.units]) + (self.gdp * self.value)
     
     # TODO: what about order?
     def get_values(self):
         return list(self.__dict__.values())
+
+    def fund_calc(self, rate):
+        values = []
+        for key in self.other_country_value.keys():
+            values.append(self.other_country_value[key] * rate[key])
+        values.append(self.value * rate[self.id_])
+        self.fund = sum(values)
+        return self.fund
 
 
 class Unit:
@@ -107,18 +127,28 @@ class Unit:
 
 
 # TODO: Senpai Nikita, notice me
-class Game:
-    def __init__(self):
+class Game(object):
+    def __init__(self, players_):
+        self.players = players_
+        self.players_id = []
+        for p in self.players:
+            self.players_id.append(p.id_)
         # курс прошлого хода
         self.old_rate = {}
+        # курс нового хода
+        self.new_rate = self.rate_calc_first()
         # отражает мощность создаваемого юнита, ведь через некоторое
         # кол-во ходов игрокам будет не хватать слабых начальных юнитов
         self.unit_char = 0
-        self.players = []
         self.players_rate = {}
         self.move = 0
+        # Todo: надо сюда добавлять все айдишки игроков
 
         self.market = Market()
+        self.exchange = Exchange()
+
+        # TODO: check this
+        self.game_start()
 
     # все действия для перехода на следующий ход
     def next_move(self):
@@ -126,22 +156,41 @@ class Game:
         for p in self.players:
             p.save()
         self.save()
+        self.rate_calc()
 
+    # Todo: check this
     # первый подсчет рейтинга
     def rate_calc_first(self):
         # тут тип надо сложить сумму всех фондов в собственной валюте игроков
         # а потом разделить значение одного на общее и распихать это все либо
         # в словарь, либо в список
-        for p in self.players:
-            pass
+        rate = {}
+        sum_ = 0
 
+        for p in self.players:
+            sum_ += p.value
+        part = sum_ / len(self.players)
+        for i in range(len(self.players)):
+            rate.update({self.players_id[i]: (self.players[i].value / part)})
+
+        return rate
+
+    # Todo: and this
     # последующие подсчеты
-    def rate_calc(self, id_):
+    def rate_calc(self):
         # а эта штука считает уже в последующие разы, когда надо учитывать сколько
         # у кого чужой валюты, причем чтобы было удобнее считать без рекурсивной хуйни,
         # можно использовать два поля old_rate и на его основании проводить подсчет
-        for p in self.players:
-            pass
+        self.old_rate = self.new_rate
+        rate = {}
+        sum_ = 0
+        fund = []
+        for i in range(len(self.players)):
+            fund.append(self.players[i].fund_calc(self.old_rate))
+        sum_ = sum(fund)
+        for i in range(len(self.players)):
+            rate.update({self.players[i].id_: (fund[i] / sum_)})
+        return rate
 
     # проверка на заполненность маркета и на отсутствие слишком слабых юнитов
     # оздает юнита в противном случае
@@ -152,14 +201,17 @@ class Game:
     # прибавлене в фонды в конце хода
     def fund_move(self):
         for p in self.players:
-            p.income_fund(p.calculate_profit())
+            p.income_value(p.calculate_profit())
 
     # сохранение настроек игры
     def save(self):
         pass
 
+    def game_start(self):
+        self.new_rate = self.rate_calc_first()
 
-# разберись с ентим дерьмом
+
+# Todo: разберись с ентим дерьмом
 class UnitSell:
     def __init__(self):
         self.units_to_sell = {}

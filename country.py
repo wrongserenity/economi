@@ -1,3 +1,6 @@
-country = [{'country': 'Russia', 'start_fund': 700, 'gdp': 1.09}, {'country': 'USA', 'start_fund': 400, 'gdp': 1.2},
-           {'country': 'German', 'start_fund': 550, 'gdp': 1.12}, {'country': 'China', 'start_fund': 300, 'gdp': 1.25},
-           {'country': 'Sweden', 'start_fund': 500, 'gdp': 1.17}]
+# start_value / gdp
+country_st = {'Russia': [700, 1.09],
+           'USA': [400, 1.2],
+           'German': [550, 1.12],
+           'China': [300, 1.25],
+           'Sweden': [500, 1.17]}

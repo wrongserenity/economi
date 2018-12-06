@@ -24,6 +24,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 player_start_data = {}
 ready_ = False
 
+
 # отвечает за нажатие на кнопку "buy" в поле покупки валюты
 class PlayerValueBuy:
     def buy_press(self, event):
