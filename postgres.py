@@ -36,7 +36,7 @@ class PostgresConnection:
                 cur.execute(user_id)
                 return cur.fetchall()
                 
-    # TODO: update number of values
+    # TODO: update number of values     
     # TODO: should return dict
     def set_data(self, user_obj):
         with self.__cursor() as cur:
