@@ -18,9 +18,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 player_start_data = {}
 
+class PlayerValueBuy:
+    def buy_press:
+        pass
 
 class MarketExchangeUnits:
-    # переменные
+    # переменные, в которые надо подгружать информацию с сервака
+    # при нажатии на Market / Exchange / Units
     # label_86 price1
     # label_87 prod1
     # label_88 steps1
@@ -264,7 +268,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
 
         self.label_52.mousePressEvent = self.scroll_up
         self.label_53.mousePressEvent = self.scroll_down
-        
+
     def player_one(self, event):
         self.player_open()
 
@@ -327,7 +331,6 @@ class EnterCountry(QtWidgets.QMainWindow, g_choose_country.Ui_EnterCountry):
         self.label_4.mousePressEvent = self.ch_china
         self.label_5.mousePressEvent = self.ch_germany
         self.label_6.mousePressEvent = self.ch_usa
-
 
     def close_cl(self, event):
         QtCore.QCoreApplication.instance().quit()
