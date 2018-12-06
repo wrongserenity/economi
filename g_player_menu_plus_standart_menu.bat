@@ -1,1 +1,0 @@
-pyuic5 g_player_menu_plus_stundart_menu.ui -o g_pl_menu_plus_st_menu.py
