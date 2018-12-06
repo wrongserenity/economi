@@ -1,0 +1,1 @@
+pyuic5 background.ui -o background.py

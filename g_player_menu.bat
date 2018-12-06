@@ -1,0 +1,1 @@
+pyuic5 g_player_menu.ui -o g_player_menu.py
