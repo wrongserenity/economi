@@ -56,27 +56,27 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="519" />
+          <entry key="Python Console" value="829" />
           <entry key="dummy" value="18" />
-          <entry key="py" value="13857" />
+          <entry key="py" value="15262" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="14376" />
+          <entry key="Python" value="16091" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="bat" value="2" />
-          <entry key="py" value="43" />
+          <entry key="py" value="44" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="43" />
+          <entry key="Python" value="44" />
         </counts>
       </usages-collector>
     </session>
@@ -85,7 +85,7 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/mongo.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="153">
@@ -135,14 +135,27 @@
               </provider>
             </entry>
           </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/logic.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-1919">
+                  <caret line="187" column="21" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                    <marker date="1544089233336" expanded="true" signature="597:708" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
         </leaf>
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/g_pl_menu_plus_st_menu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="20536">
+                <state relative-caret-position="-284">
                   <caret line="1208" column="22" selection-start-line="1208" selection-start-column="22" selection-end-line="1208" selection-end-column="22" />
                 </state>
               </provider>
@@ -151,8 +164,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/g_st_menu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="20434">
-                  <caret line="1202" column="59" selection-start-line="1202" selection-start-column="59" selection-end-line="1202" selection-end-column="59" />
+                <state relative-caret-position="260">
+                  <caret line="1178" column="21" selection-start-line="1163" selection-start-column="21" selection-end-line="1178" selection-end-column="21" />
                 </state>
               </provider>
             </entry>
@@ -160,7 +173,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/g_player_menu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-16779" />
+                <state relative-caret-position="-20349" />
               </provider>
             </entry>
           </file>
@@ -169,35 +182,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="394">
                   <caret line="1230" column="32" selection-start-line="1230" selection-start-column="32" selection-end-line="1230" selection-end-column="32" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/logic.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="85">
-                  <caret line="26" column="46" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
-                  <folding>
-                    <element signature="e#0#10#0" expanded="true" />
-                    <marker date="1544086804077" expanded="true" signature="339:373" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="399:2429" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="997:1483" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="2762:3966" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="4074:4079" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="4074:5341" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="4982:5085" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="5431:5436" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="5431:6974" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="6567:6600" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="8108:8113" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="8917:8995" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="9365:12335" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="9442:10033" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="10066:10075" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="10491:10631" ph="..." />
-                    <marker date="1544086804077" expanded="true" signature="10856:12335" ph="..." />
-                  </folding>
                 </state>
               </provider>
             </entry>
@@ -218,6 +202,10 @@
       <find>unit</find>
       <find>setBr</find>
       <find>setupUi</find>
+      <find>Gui</find>
+      <find>label</find>
+      <find>Stan</find>
+      <find>label_</find>
     </findStrings>
     <replaceStrings>
       <replace>unit_coef</replace>
@@ -530,25 +518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/g_pl_menu_plus_st_menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20536">
-          <caret line="1208" column="22" selection-start-line="1208" selection-start-column="22" selection-end-line="1208" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/g_st_menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20434">
-          <caret line="1202" column="59" selection-start-line="1202" selection-start-column="59" selection-end-line="1202" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/g_player_menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-16779" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/g.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="394">
@@ -556,29 +525,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/g_st_menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="1178" column="21" selection-start-line="1163" selection-start-column="21" selection-end-line="1178" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/g_player_menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20349" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/g_pl_menu_plus_st_menu.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-284">
+          <caret line="1208" column="22" selection-start-line="1208" selection-start-column="22" selection-end-line="1208" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/logic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="26" column="46" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
+        <state relative-caret-position="-1919">
+          <caret line="187" column="21" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1544086804077" expanded="true" signature="339:373" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="399:2429" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="997:1483" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="2762:3966" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="4074:4079" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="4074:5341" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="4982:5085" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="5431:5436" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="5431:6974" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="6567:6600" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="8108:8113" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="8917:8995" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="9365:12335" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="9442:10033" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="10066:10075" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="10491:10631" ph="..." />
-            <marker date="1544086804077" expanded="true" signature="10856:12335" ph="..." />
+            <marker date="1544089233336" expanded="true" signature="597:708" ph="..." />
           </folding>
         </state>
       </provider>

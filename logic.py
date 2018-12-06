@@ -16,15 +16,25 @@ from classes import Connection
 import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
+# тут хранятся данные об игрока, отправляемы на сервер, когда
+# игрок вводит свое имя
+# сервер отправляет в ответ id и все данные связанные с выбранной
+# страной и сохраняет в полях класса игрока
 player_start_data = {}
 
+
+# отвечает за нажатие на кнопку "buy" в поле покупки валюты
 class PlayerValueBuy:
-    def buy_press:
+    def buy_press(self, event):
         pass
 
-class MarketExchangeUnits:
+
+# отвечает за все операции над окнами Market, Exchange и Гтшеы
+class MarketExchangeUnits(object):
+    gui_window_name = None
     # переменные, в которые надо подгружать информацию с сервака
-    # при нажатии на Market / Exchange / Units
+    # при нажатии на Market / Exchange / Units справа в окне
     # label_86 price1
     # label_87 prod1
     # label_88 steps1
@@ -46,8 +56,12 @@ class MarketExchangeUnits:
     # label_51 level4
 
     # переход по страницам в Market, Exchange и Units
-    def scroll_up(self, event):
-        pass
+    class ScrollUp(object):
+        def __init__(self, gui_window_name):
+            self.gui_window_name = gui_window_name
+
+        def __call__(self, event):
+            pass
 
     def scroll_down(self, event):
         pass
@@ -61,54 +75,52 @@ class MarketExchangeUnits:
     # зависят от момента игры, ведь с ростом фонда появится нужда в более
     # производительных юнитах)
     def market_open(self, event):
+        self.gui_window_name = "market"
         pass
 
     # аналогичная функция для изменения переменных, выводимых на экран
     # только тут должны "хранится" данные о юнитах, выставленных на
     # продажу другими игроками
     def exchange_open(self, event):
+        self.gui_window_name = "exchange"
         pass
 
     # опять же похожа функция, но выводит доступные игроку юниты
     def units_open(self, event):
+        self.gui_window_name = "units"
         pass
 
     # продажа или покупка юнитов
     # или поднять уровень юнита / продать
+    # о - некоторое положительное действие - покупка, поднять level
+    # x - некоторое отрицательное дейстивие - продажа
+    # x активна только в окне Units
     def o1(self, event):
-        print('o1')
         pass
 
     def x1(self, event):
-        print('x1')
         pass
 
     def o2(self, event):
-        print('o2')
         pass
 
     def x2(self, event):
-        print('x2')
         pass
 
     def o3(self, event):
-        print('o3')
         pass
 
     def x3(self, event):
-        print('x3')
         pass
 
     def o4(self, event):
-        print('o4')
         pass
 
     def x4(self, event):
-        print('x4')
         pass
 
 
-# это тупо фон, чтобы
+# это тупо фон, чтобы при переходах не моргал рабочий стол
 class Background(QtWidgets.QMainWindow, background.Ui_BackGround):
     def __init__(self, parent=None):
         super(Background, self).__init__(parent)
@@ -121,23 +133,23 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
         super(PlayerMenu, self).__init__(parent)
         self.setupUi(self)
 
-        # закррытие мен. игрока и открытие обычного меню
+        # закрытие меню игрока и открытие обычного меню
         self.label_20.mousePressEvent = self.menu_open
         self.label_4.mousePressEvent = self.player_cl
 
-        # market, echange, units
+        # market, exchange, units
         self.label.mousePressEvent = self.market_open
         self.label_2.mousePressEvent = self.exchange_open
         self.label_3.mousePressEvent = self.units_open
 
-        self.label_90.mousePressEvent = self.o1
-        self.label_91.mousePressEvent = self.x1
-        self.label_62.mousePressEvent = self.o2
-        self.label_72.mousePressEvent = self.x2
-        self.label_69.mousePressEvent = self.o3
-        self.label_74.mousePressEvent = self.x3
-        self.label_61.mousePressEvent = self.o4
-        self.label_71.mousePressEvent = self.x4
+        self.label_70.mousePressEvent = self.o1
+        self.label_74.mousePressEvent = self.x1
+        self.label_68.mousePressEvent = self.o2
+        self.label_73.mousePressEvent = self.x2
+        self.label_61.mousePressEvent = self.o3
+        self.label_71.mousePressEvent = self.x3
+        self.label_67.mousePressEvent = self.o4
+        self.label_72.mousePressEvent = self.x4
 
     def menu_open(self, event):
         self.pl_and_sr_menu = PlayerAndStandartMenu()
@@ -166,14 +178,14 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         self.label_2.mousePressEvent = self.exchange_open
         self.label_3.mousePressEvent = self.units_open
 
-        self.label_90.mousePressEvent = self.o1
-        self.label_91.mousePressEvent = self.x1
-        self.label_62.mousePressEvent = self.o2
-        self.label_72.mousePressEvent = self.x2
-        self.label_69.mousePressEvent = self.o3
-        self.label_74.mousePressEvent = self.x3
-        self.label_61.mousePressEvent = self.o4
-        self.label_71.mousePressEvent = self.x4
+        self.label_73.mousePressEvent = self.o1
+        self.label_77.mousePressEvent = self.x1
+        self.label_72.mousePressEvent = self.o2
+        self.label_76.mousePressEvent = self.x2
+        self.label_74.mousePressEvent = self.o3
+        self.label_78.mousePressEvent = self.x3
+        self.label_75.mousePressEvent = self.o4
+        self.label_79.mousePressEvent = self.x4
 
     def player_cl(self, event):
         self.st_menu = StandartMenu()
@@ -193,6 +205,8 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
 class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExchangeUnits):
     def __init__(self, parent=None):
         super(StandartMenu, self).__init__(parent)
+        import pdb
+        # pdb.set_trace()
         self.setupUi(self)
 
         self.label_61.mousePressEvent = self.close_cl
@@ -206,14 +220,14 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
         self.label_2.mousePressEvent = self.exchange_open
         self.label_3.mousePressEvent = self.units_open
 
-        self.label_90.mousePressEvent = self.o1
-        self.label_91.mousePressEvent = self.x1
-        self.label_62.mousePressEvent = self.o2
-        self.label_72.mousePressEvent = self.x2
-        self.label_69.mousePressEvent = self.o3
+        self.label_71.mousePressEvent = self.o1
+        self.label_75.mousePressEvent = self.x1
+        self.label_70.mousePressEvent = self.o2
+        self.label_74.mousePressEvent = self.x2
+        self.label_70.mousePressEvent = self.o3
         self.label_74.mousePressEvent = self.x3
-        self.label_61.mousePressEvent = self.o4
-        self.label_71.mousePressEvent = self.x4
+        self.label_72.mousePressEvent = self.o4
+        self.label_76.mousePressEvent = self.x4
 
     def player_one(self, event):
         self.player_open()
@@ -241,6 +255,7 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
 # основное окно без открытых меню
 class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
     def __init__(self, parent=None):
+        self.st_menu = None
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
@@ -266,7 +281,8 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
         self.label_61.mousePressEvent = self.o4
         self.label_71.mousePressEvent = self.x4
 
-        self.label_52.mousePressEvent = self.scroll_up
+        scroll_up = self.ScrollUp(self.gui_window_name)
+        self.label_52.mousePressEvent = scroll_up
         self.label_53.mousePressEvent = self.scroll_down
 
     def player_one(self, event):
@@ -278,6 +294,8 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
     def player_three(self, event):
         self.player_open()
 
+    # здесь так же надо продумать, как можно сделать так, чтобы при нажатии,
+    # например, на player2 выводилась информация именно по второму игроку
     def player_open(self):
         self.player_menu = PlayerMenu()
         self.player_menu.showFullScreen()
