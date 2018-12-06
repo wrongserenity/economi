@@ -22,8 +22,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # сервер отправляет в ответ id и все данные связанные с выбранной
 # страной и сохраняет в полях класса игрока
 player_start_data = {}
-next_move_ready = False
-
+ready_ = False
 
 # отвечает за нажатие на кнопку "buy" в поле покупки валюты
 class PlayerValueBuy:
@@ -96,6 +95,7 @@ class MarketExchangeUnits(object):
     # о - некоторое положительное действие - покупка, поднять level
     # x - некоторое отрицательное дейстивие - продажа
     # x активна только в окне Units
+    # должны срабатывать, только когда global ready_ - False
     def o1(self, event):
         pass
 
@@ -152,6 +152,17 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
         self.label_67.mousePressEvent = self.o4
         self.label_72.mousePressEvent = self.x4
 
+        self.label_19.mousePressEvent = self.next_move
+
+        global ready_
+        if ready_:
+            self.label_19.setText('wait')
+
+    def next_move(self, event):
+        global ready_
+        ready_ = True
+        self.label_19.setText('wait')
+
     def menu_open(self, event):
         self.pl_and_sr_menu = PlayerAndStandartMenu()
         self.pl_and_sr_menu.showFullScreen()
@@ -187,6 +198,17 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         self.label_78.mousePressEvent = self.x3
         self.label_75.mousePressEvent = self.o4
         self.label_79.mousePressEvent = self.x4
+
+        self.label_19.mousePressEvent = self.next_move
+
+        global ready_
+        if ready_:
+            self.label_19.setText('wait')
+
+    def next_move(self, event):
+        global ready_
+        ready_ = True
+        self.label_19.setText('wait')
 
     def player_cl(self, event):
         self.st_menu = StandartMenu()
@@ -229,6 +251,17 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
         self.label_74.mousePressEvent = self.x3
         self.label_72.mousePressEvent = self.o4
         self.label_76.mousePressEvent = self.x4
+
+        self.label_19.mousePressEvent = self.next_move
+
+        global ready_
+        if ready_:
+            self.label_19.setText('wait')
+
+    def next_move(self, event):
+        global ready_
+        ready_ = True
+        self.label_19.setText('wait')
 
     def player_one(self, event):
         self.player_open()
@@ -288,7 +321,13 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
 
         self.label_19.mousePressEvent = self.next_move
 
+        global ready_
+        if ready_:
+            self.label_19.setText('wait')
+
     def next_move(self, event):
+        global ready_
+        ready_ = True
         self.label_19.setText('wait')
 
     def player_one(self, event):
