@@ -22,6 +22,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # сервер отправляет в ответ id и все данные связанные с выбранной
 # страной и сохраняет в полях класса игрока
 player_start_data = {}
+next_move_ready = False
 
 
 # отвечает за нажатие на кнопку "buy" в поле покупки валюты
@@ -30,7 +31,7 @@ class PlayerValueBuy:
         pass
 
 
-# отвечает за все операции над окнами Market, Exchange и Гтшеы
+# отвечает за все операции над окнами Market, Exchange и Units
 class MarketExchangeUnits(object):
     gui_window_name = None
     # переменные, в которые надо подгружать информацию с сервака
@@ -284,6 +285,11 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
         scroll_up = self.ScrollUp(self.gui_window_name)
         self.label_52.mousePressEvent = scroll_up
         self.label_53.mousePressEvent = self.scroll_down
+
+        self.label_19.mousePressEvent = self.next_move
+
+    def next_move(self, event):
+        self.label_19.setText('wait')
 
     def player_one(self, event):
         self.player_open()
