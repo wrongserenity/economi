@@ -58,13 +58,13 @@
         <counts>
           <entry key="Python Console" value="829" />
           <entry key="dummy" value="18" />
-          <entry key="py" value="15262" />
+          <entry key="py" value="15545" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="16091" />
+          <entry key="Python" value="16374" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -138,11 +138,12 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/logic.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1919">
-                  <caret line="187" column="21" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
+                <state relative-caret-position="544">
+                  <caret line="291" column="35" selection-start-line="291" selection-start-column="35" selection-end-line="291" selection-end-column="35" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
-                    <marker date="1544089233336" expanded="true" signature="597:708" ph="..." />
+                    <marker date="1544103465014" expanded="true" signature="621:732" ph="..." />
+                    <marker date="1544103465014" expanded="true" signature="9016:9060" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -152,10 +153,10 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/g_pl_menu_plus_st_menu.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-284">
+                <state relative-caret-position="-131">
                   <caret line="1208" column="22" selection-start-line="1208" selection-start-column="22" selection-end-line="1208" selection-end-column="22" />
                 </state>
               </provider>
@@ -177,10 +178,10 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/g.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="394">
+                <state relative-caret-position="-167">
                   <caret line="1230" column="32" selection-start-line="1230" selection-start-column="32" selection-end-line="1230" selection-end-column="32" />
                 </state>
               </provider>
@@ -518,13 +519,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/g.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="1230" column="32" selection-start-line="1230" selection-start-column="32" selection-end-line="1230" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/g_st_menu.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
@@ -539,18 +533,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/g_pl_menu_plus_st_menu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-284">
+        <state relative-caret-position="-131">
           <caret line="1208" column="22" selection-start-line="1208" selection-start-column="22" selection-end-line="1208" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/g.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-167">
+          <caret line="1230" column="32" selection-start-line="1230" selection-start-column="32" selection-end-line="1230" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/logic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1919">
-          <caret line="187" column="21" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
+        <state relative-caret-position="544">
+          <caret line="291" column="35" selection-start-line="291" selection-start-column="35" selection-end-line="291" selection-end-column="35" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1544089233336" expanded="true" signature="597:708" ph="..." />
+            <marker date="1544103465014" expanded="true" signature="621:732" ph="..." />
+            <marker date="1544103465014" expanded="true" signature="9016:9060" ph="..." />
           </folding>
         </state>
       </provider>

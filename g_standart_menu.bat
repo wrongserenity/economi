@@ -1,0 +1,1 @@
+pyuic5 g_standart_menu.ui -o g_st_menu.py
