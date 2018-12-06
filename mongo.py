@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 
 # TODO: write try:.. except.. wrappers
-class MongoConnection:
+class MongoConnection(object):
     def __init__(self, db_name, col_name, **mongo_configs):
         self.client = MongoClient(**mongo_configs)
         self.db = self.client[db_name]
@@ -26,4 +26,7 @@ class MongoConnection:
     def close_connection(self):
         self.client.close()
 
+    def get_units(self, uid):
+        return self.collection.find({"owner_id": uid})
 
+        
