@@ -3,14 +3,13 @@ import config
 from postgres import PostgresConnection
 from mongo import MongoConnection
 from unit import unit_coef, level_coef, pages, min_value_percent
-from for_server import game, market, exchange
+# from for_server import game, market, exchange
 from country import *
 import asyncio
 import tornado
 import json
 import random
 
-from for_server import exchange
 
 
 class Connection(object):
