@@ -1,5 +1,6 @@
 from classes import *
 from country import *
+from unit import *
 
 import pdb
 
@@ -28,3 +29,24 @@ moves = 5
 while moves > 0:
     game.next_move()
     moves -= 1
+
+units = []
+id_ = None
+cost = unit_coef[1]['cost']
+steps = unit_coef[1]['steps']
+prod = unit_coef[1]['prod']
+level = unit_coef[1]['level']
+unit = Unit(id_, cost, steps, prod, level)
+game.players[0].plus_unit(cost, unit)
+
+exchange = Exchange()
+market = Market()
+
+print(game.__dict__)
+print(game.players[0].__dict__)
+print(game.players[0].units[0].__dict__)
+game.players[0].units[0].lvl_up()
+print(game.players[0].units[0].__dict__)
+
+
+
