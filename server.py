@@ -34,8 +34,20 @@ class EconomiTcpServer(object):
     def get_user_data(self, uid):
         return self.postgres_connection.get_data(uid)
 
-    def set_user_data(self, ):
+    def set_user_data(self, user_dict):
+        return self.postgres_connection.set_data(user_dict)
 
+    def update_user_data(self, user_dict):
+        return self.postgres_connection.update_data(user_dict)
+
+    def new_unit(self, unit_dict):
+        return self.mongo_connection.new_unit(unit_dict)
+
+    def update_unit(self, unit_id, unit_dict):
+        return self.mongo_connection.update_unit(unit_id, unit_dict)
+
+    def remove_unit(self, unit_id):
+        self.mongo_connection.remove_unit(unit_id)
 
     @staticmethod
     def format_(obj, out=False):
@@ -52,8 +64,30 @@ class EconomiTcpServer(object):
             while True:
                 line = yield self.stream.read_until(b'\n')
                 data = self.format_(line)
+                if data['action'] == "get_units" and "uid" in data['args'].keys():
+                    out = self.get_units(data['args']['uid'])
+                elif data['action'] == "get_unit" and "unit_id" in data['args'].keys():
+                    out = self.get_unit(data['args']['unit_id'])
+                elif data['action'] == "remove_unit" and "unit_id" in data['args'].keys():
+                    out = self.remove_unit(data['args']['unit_id'])
+                elif data['action'] == "get_user_data" and "uid" in data['args'].keys():
+                    out = self.get_user_data(data['args']['uid'])
+                elif data['action'] == "set_user_data" and "user_dict" in data['args'].keys():
+                    out = self.set_user_data(data['args']['user_dict'])
+                elif data['action'] == "update_user_data" and "user_dict" in data['args'].keys():
+                    out = self.update_user_data(data['args']['user_dict'])
+                elif data['action'] == "new_unit" and "unit_dict" in data['args'].keys():
+                    out = self.new_unit(data['args']['unit_dict'])
+                elif data['action'] == "update_unit" and "unit_id" in data['args'].keys() \
+                        and "unit_dict" in data['args'].keys():
+                    out = self.update_unit(data['args']['unit_id'], data['args']['unit_dict'])
+                elif data["action"] == "get_uid":
+                    out = self.postgres_connection.get_uid()
+                else:
+                    out = "Error occurred"
+
                 self.log('got |%s|' % str(data))
-                yield self.stream.write(self.format_(data['args'], out=True))
+                yield self.stream.write(self.format_(out if out else "", out=True))
         except tornado.iostream.StreamClosedError:
             pass
 

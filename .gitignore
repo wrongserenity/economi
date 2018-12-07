@@ -23,4 +23,7 @@ g_st_menu.py
 g_standart_menu.bat
 g_standart_menu.ui
 qt.py
-.idea\workspace.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/project.iml
+

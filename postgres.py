@@ -26,8 +26,10 @@ class PostgresConnection:
             cur.execute("FROM users_table SELECT * WHERE user_id = %d", (user_id, ))
             return cur.fetchone()
 
-    def check_hash(self, login, hash_):
-        pass
+    def get_uid(self):
+        with self.__cursor() as cur:
+            cur.execute("SELECT max(user_id) from users_table")
+            return int(cur.fetchone()[0])
 
     def get_many(self, user_id_list):
         with self.__cursor() as cur:
@@ -38,9 +40,18 @@ class PostgresConnection:
                 
     # TODO: update number of values     
     # TODO: should return dict
-    def set_data(self, user_obj):
+    def set_data(self, user_dict):
         with self.__cursor() as cur:
-            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_obj.get_values()))
+            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_dict.values()))
+            return self.get_uid()
+
+    def update_data(self, user_dict):
+        with self.__cursor() as cur:
+            id_ = user_dict.pop("id")
+            cur.execute("UPDATE users_table SET name = %s, country = %s, value = %s, gdp = %s WHERE user_id = %s",
+                        (*[val for val in user_dict.values()], id_))
+
+
 
 
 

@@ -4,23 +4,59 @@ from postgres import PostgresConnection
 from mongo import MongoConnection
 from unit import *
 from country import *
-
+import asyncio
+import tornado
+import json
 import random
 
 
-class Connection:
-    def __init__(self):
-        self.session = aiohttp.ClientSession()
-        self.base_ip = config.SERVER_IP
-        self.base_port = config.SERVER_PORT
-        self.get_id_url = f"{self.base_ip}:{self.base_port}/get_id"
+class Connection(object):
+    client = tornado.tcpclient.TCPClient()
+    loop = asyncio.get_event_loop()
 
-    async def get_uid(self):
-        async with self.session.get(self.get_id) as response:
-            return await response.text()
+    def __init__(self, ip="0.0.0.0", port="8008"):
+        self.HOST = ip
+        self.PORT = port
 
-    def load_settings(self):
-        pass
+    @staticmethod
+    def format_(obj, out=False):
+        return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
+
+    async def __send_request(self, msg):
+        stream = await self.client.connect(self.HOST, self.PORT)
+        stream.write(self.format_(msg, out=True))
+        response = await stream.read_until(b"\n")
+        return self.format_(response)
+
+    def get_units(self, uid):
+        return self.__request({"action": "get_units", "args": {"uid": uid}})
+
+    def get_unit(self, unit_id):
+        return self.__request({"action": "get_unit", "args": {"unit_id": unit_id}})
+
+    def get_user_data(self, uid):
+        return self.__request({"action": "get_user_data", "args": {"uid": uid}})
+
+    def set_user_data(self, user_dict):
+        return self.__request({"action": "set_user_data", "args": {"user_dict": user_dict}})
+
+    def update_user_data(self, user_dict):
+        return self.__request({"action": "update_user_data", "args": {"user_dict": user_dict}})
+
+    def remove_unit(self, owner_id, unit_id):
+        return self.__request({"action": "remove_unit", "args": {"unit_id": unit_id}})
+
+    def new_unit(self, unit_dict):
+        return self.__request({"action": "new_unit", "args": {"unit_dict": unit_dict}})
+
+    def update_unit(self, unit_id, new_dict):
+        return self.__request({"action": "update_unit", "args": {"unit_id": unit_id, "unit_dict": new_dict}})
+
+    def get_uid(self):
+        return self.__request({"action": "get_uid"})
+
+    def __request(self, req):
+        return self.loop.run_until_complete(self.__send_request(req))
 
 
 class Player(object):
@@ -32,33 +68,37 @@ class Player(object):
             self.country = country_
             # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
             # Todo: надо разграничить понятие фонда в пересчете на общую валюту
+            # Todo Nick: чё? давай сам займешься экономической фигней
             # путь fund - это в пересчете
             self.fund = 0
             self.gdp = start_gdp
 
             self.value = start_value
             self.other_country_value = {}
-
-            # todo: временная чтука для проверки работоспособности
-            self.id_ = str(random.randint(1, 8))
-            # сохраненние данных
-            # PostgresConnection.set_data()
             self.units = []
-            return
+
+            # сохраненние данных
+            conn = Connection()
+            self.id_ = conn.set_user_data(self.__dict__)
+
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         else:
             self.id_ = id_
             # опять сохраняет данные для игрока
-            # TODO: тут нз как get_data и get_units
-            for key, val in PostgresConnection.get_data(self.id_).item():
-                self.__setattr__(key, val)
-            self.units = [Unit(data=data) for data in MongoConnection.get_units(self.id_)]
+            conn = Connection()
+            user_data = conn.get_user_data(id_)
+            self.name = user_data[1]
+            self.country = user_data[2]
+            self.value = user_data[3]
+            self.gdp = user_data[4]
+            units_data = conn.get_units(id_)
+            self.units = []
+            for unit_data in units_data:
+                self.units.append(Unit(data=unit_data))
 
-    # Todo: куда сохранять нз
     def save(self):
-        # хз шо с ентим делать, если честно
-        # PostgresConnection.set_data(user_obj)
-        pass
+        conn = Connection()
+        conn.update_user_data(self.__dict__)
 
     # прибавление в фонде при продаже юнита
     def income_value(self, profit):
@@ -85,7 +125,7 @@ class Player(object):
     def calculate_profit(self):
         return sum([unit.productivity for unit in self.units]) + (self.gdp * self.value)
     
-    # TODO: what about order?
+    # Несмотря на то, что это не ordered dict они всё ещё хранятся в порядке добавления, вроде как!!!
     def get_values(self):
         return list(self.__dict__.values())
 
@@ -100,27 +140,33 @@ class Player(object):
 
 class Unit:
     def __init__(self, id_=None, cost=None, cast_time=None, cast_cost=None, st_prod=None, data=None, level=None):
+        conn = Connection()
+        if id_:
+            data = conn.get_unit(id_)
         if data:
             for key, val in data.items():
                 self.__setattr__(key, val)
                 return
+        # тут мы типа создаём unit?
         # задание полей id, кол-ва ходов для создания,
-        self.identifier = id_
         self.steps_to_create = cast_time
         self.productivity_ = st_prod
         self.cast_cost = cast_cost
         self.level = level
         self.productivity = 0
         self.cost = cost
+        self.identifier = conn.new_unit(self.__dict__)
 
     def lvl_up(self):
         self.level += 1
         self.productivity = round(self.productivity * level_coef[self.level - 1]['prod'])
         self.cost = round(self.cost * level_coef[self.level - 1]['prod'])
-        MongoConnection.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
+        conn = Connection()
+        conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
 
     def remove(self):
-        MongoConnection.remove_unit(self.identifier)
+        conn = Connection()
+        conn.remove_unit(self.identifier)
     
     def to_dict(self):
         return self.__dict__
@@ -205,6 +251,7 @@ class Game(object):
 
     # сохранение настроек игры
     def save(self):
+        # TODO: idk it's 5 am I wanna do that but i'm fallin' asleep, so, 2morro
         pass
 
     def game_start(self):

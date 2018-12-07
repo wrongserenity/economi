@@ -11,8 +11,8 @@ class MongoConnection(object):
     def get_unit(self, unit_id):
         return self.collection.find_one({"unit_id": unit_id})
     
-    def set_unit(self, unit_obj):
-        self.collection.insert_one(unit_obj.to_dict())
+    def new_unit(self, unit_dict):
+        return self.collection.insert_one(unit_dict)
     
     def count_units(self, owner_id):
         return self.collection.count_documents({"owner_id": owner_id})
