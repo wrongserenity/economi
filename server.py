@@ -1,13 +1,17 @@
+from classes import Game, Player
+import tornado
 import socket
 import tornado.gen
 import tornado.ioloop
 import tornado.iostream
 import tornado.tcpserver
 import tornado.tcpclient
-import json
 import mongo
 import postgres
 from itertools import count
+import json
+
+game = Game()
 
 
 class EconomiTcpServer(object):
@@ -32,10 +36,18 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_user_data(self, uid):
-        return self.postgres_connection.get_data(uid)
+        data = self.postgres_connection.get_data(uid)
+        game.players.append(Player(data['id'], data['name'], data['country'], data['start_value'], data["start_gpd"]))
+        if len(game.players) == 4:
+            game.start()
 
     def set_user_data(self, user_dict):
-        return self.postgres_connection.set_data(user_dict)
+        res_id = self.postgres_connection.set_data(user_dict)
+        game.players.append(Player(res_id, user_dict["name"], user_dict["country"],
+                                   *Player.country_st.get(user_dict["country"])))
+        if len(game.players) == 4:
+            game.start()
+        return res_id
 
     def update_user_data(self, user_dict):
         return self.postgres_connection.update_data(user_dict)
@@ -119,20 +131,22 @@ class TcpServer(tornado.tcpserver.TCPServer):
         connection = EconomiTcpServer(stream, self.mongo_connection, self.postgres_connection)
         yield connection.on_connect()
 
+    def run_(self):
+        # configuration
+        host = '0.0.0.0'
+        port = 8008
 
-def main():
-    # configuration
-    host = '0.0.0.0'
-    port = 8008
+        # tcp server
+        self.listen(port, host)
+        print("Li-stening on %s:%d..." % (host, port))
 
-    # tcp server
-    server = TcpServer()
-    server.listen(port, host)
-    print("Listening on %s:%d..." % (host, port))
-
-    # infinite loop
-    tornado.ioloop.IOLoop.instance().start()
+        # infinite loop
+        tornado.ioloop.IOLoop.instance().start()
 
 
-if __name__ == "__main__":
-    main()
+server = TcpServer()
+
+
+
+
+

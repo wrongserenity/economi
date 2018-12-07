@@ -1,6 +1,4 @@
 import sys
-import pdb
-
 import g
 import g_st_menu
 import g_enter_name
@@ -9,10 +7,10 @@ import g_main_menu
 import g_player_menu
 import background
 import g_pl_menu_plus_st_menu
-
+import tornado
+import asyncio
 import os
 import json
-from classes import Connection
 import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -22,7 +20,65 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # сервер отправляет в ответ id и все данные связанные с выбранной
 # страной и сохраняет в полях класса игрока
 player_start_data = {}
+players_data = []
 ready_ = False
+
+
+def update():
+    pass
+
+
+class Connection(object):
+    client = tornado.tcpclient.TCPClient()
+    loop = asyncio.get_event_loop()
+
+    def __init__(self, ip="0.0.0.0", port="8008"):
+        self.HOST = ip
+        self.PORT = port
+
+    @staticmethod
+    def format_(obj, out=False):
+        return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
+
+    async def __send_request(self, msg):
+        stream = await self.client.connect(self.HOST, self.PORT)
+        stream.write(self.format_(msg, out=True))
+        response = await stream.read_until(b"\n")
+        return self.format_(response)
+
+    def get_units(self, uid):
+        return self.__request({"action": "get_units", "args": {"uid": uid}})
+
+    def get_unit(self, unit_id):
+        return self.__request({"action": "get_unit", "args": {"unit_id": unit_id}})
+
+    def get_user_data(self, uid):
+        return self.__request({"action": "get_user_data", "args": {"uid": uid}})
+
+    def get_market_units(self):
+        return self.__request({"action":"get_market_units", "args": {}})
+
+    def set_user_data(self, user_dict):
+        return self.__request({"action": "set_user_data", "args": {"user_dict": user_dict}})
+
+    def update_user_data(self, user_dict):
+        return self.__request({"action": "update_user_data", "args": {"user_dict": user_dict}})
+
+    def remove_unit(self, owner_id, unit_id):
+        return self.__request({"action": "remove_unit", "args": {"unit_id": unit_id}})
+
+    def new_unit(self, unit_dict):
+        return self.__request({"action": "new_unit", "args": {"unit_dict": unit_dict}})
+
+    def update_unit(self, unit_id, new_dict):
+        return self.__request({"action": "update_unit", "args": {"unit_id": unit_id, "unit_dict": new_dict}})
+
+    def get_uid(self):
+        return self.__request({"action": "get_uid"})
+
+    def __request(self, req):
+        return self.loop.run_until_complete(self.__send_request(req))
+
 
 
 # отвечает за нажатие на кнопку "buy" в поле покупки валюты
@@ -377,6 +433,11 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
         if self.lineEdit.text():
             self.gui = Gui()
             self.dict_.update({'name': self.lineEdit.text()})
+            conn = Connection()
+            uid = conn.set_user_data(self.dict_)
+            self.dict_.update({'id': uid})
+            with open("data.json", "w") as file:
+                file.write(self.dict_['id'])
             self.gui.showFullScreen()
             self.close()
             # тут надо передать даныые из словаря серверу
@@ -458,15 +519,11 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         global player_start_data
         self.ch_country.showFullScreen()
         self.close()
-        if not os.path.exists("data.json"):
-            with open("data.json", "w") as file:
-                conn = Connection()
-                self._id = conn.get_uid()
-                file.write(json.dumps({"id": self._id}))
-            player_start_data = {'id': self._id}
-
-        else:
+        if os.path.exists("data.json"):
             self._id = self.get_user_id()
+            conn = Connection()
+            data = conn.get_user_data(self._id)
+            player_start_data = dict(id=self._id, **data)
             # здесь надо открывать уже сразу окно игры и в брать данные с сервака (имя и странуб и т.д)
 
 
