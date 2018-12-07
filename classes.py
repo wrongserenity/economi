@@ -10,6 +10,7 @@ import tornado
 import json
 import random
 
+import pdb
 
 
 class Connection(object):
@@ -38,6 +39,9 @@ class Connection(object):
 
     def get_user_data(self, uid):
         return self.__request({"action": "get_user_data", "args": {"uid": uid}})
+
+    def get_market_units(self):
+        return self.__request({"action":"get_market_units", "args": {}})
 
     def set_user_data(self, user_dict):
         return self.__request({"action": "set_user_data", "args": {"user_dict": user_dict}})
@@ -79,14 +83,17 @@ class Player(object):
             # список юнитов (объектов класса Unit)
             self.units = []
 
+
             # сохраненние данных
             conn = Connection()
             self.id_ = conn.set_user_data(self.__dict__)
-            self.value = {self.id_: start_value}
 
-
+            '''
             random.seed()
-            self.id_ = random.randint(1, 100)
+            self.id_ = str(random.randint(1, 100))
+            '''
+
+            self.value = {self.id_: start_value}
 
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         else:
@@ -103,10 +110,12 @@ class Player(object):
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
 
+
     def save(self):
         conn = Connection()
         conn.update_user_data(self.__dict__)
         pass
+
 
     # удаление юнита при уничтожении
     def remove_unit(self, unit):
@@ -115,8 +124,7 @@ class Player(object):
     # продажа юнита и отправка его в exchange
     # деньги придут, только когда этот юнит купят
     def sell_unit(self, unit):
-        exchange.units.append(unit)
-        self.units.remove(unit)
+        game.exchange.add_unit(unit, self)
 
     # покупка юнита у 'who'( - тот объект, что вызвал функцию (market или exchange))
     # если у игрока не хватает своей валюты для покупки юнита, то тратятся резервы
@@ -126,7 +134,7 @@ class Player(object):
         cost = who.units[position].cost
         if cost <= self.fund:
             if cost <= self.value[self.id_] * game.new_rate[self.id_]:
-                self.value -= round(cost / game.new_rate[self.id_])
+                self.value[self.id_] -= round(cost / game.new_rate[self.id_])
             else:
                 cost -= round(self.value[self.id_] * game.new_rate[self.id_])
                 self.value[self.id_] = 0
@@ -140,12 +148,12 @@ class Player(object):
                         self.value[id_] -= round(cost * game.new_rate[id_])
                         break
             self.units.append(who.send_unit(position))
-            if who == exchange:
-                exchange.send_money(cost, position)
+            if who == game.exchange:
+                game.exchange.send_money(cost, position)
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
-        return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value)
+        return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id_])
 
     # Todo: нз что ты тут написал
     # Несмотря на то, что это не ordered dict они всё ещё хранятся в порядке добавления, вроде как!!!
@@ -158,14 +166,15 @@ class Player(object):
     def fund_calc(self, rate):
         values_ = []
         for id_ in game.players_id:
+            if id_ not in  self.value.keys():
+                continue
             values_.append(self.value[id_] * game.new_rate[id_])
         self.fund = sum(values_)
         return self.fund
 
 
 class Unit(object):
-    def __init__(self, id_, cost, steps, st_prod, level):
-
+    def __init__(self, id_, cost, steps, st_prod, level, data=None):
         conn = Connection()
 
         if id_:
@@ -184,7 +193,7 @@ class Unit(object):
         self.productivity_ = st_prod
         self.level = level
         self.cost = cost
-        self.identifier = conn.new_unit(self.__dict__)
+        self.id_ = conn.new_unit(self.__dict__)
 
 
     # поднятие уровня юнита
@@ -194,10 +203,9 @@ class Unit(object):
         self.level += 1
         self.productivity_ = round(self.productivity_ * level_coef[self.level - 1]['prod'])
         self.cost = round(self.cost * level_coef[self.level - 1]['prod'])
-#        conn = Connection()
-#        conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
+        conn = Connection()
+        conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
 
-    
     def to_dict(self):
         return self.__dict__
 
@@ -225,6 +233,7 @@ class Game(object):
         self.market = Market()
         self.exchange = Exchange()
 
+
     # все действия для перехода на следующий ход
     def next_move(self):
         # выплата (ф-ия внитри этого класса)
@@ -242,16 +251,18 @@ class Game(object):
         # уменьшения кол-ва ходов для уничтожения юнитов в объекстах
         # market и exchange
         # и сразу же проверка на непригодных
-        for who in [market, exchange]:
-            for u in who.time_exist:
-                u -= 1
+        for who in [self.market, self.exchange]:
+            for i in range(len(who.time_exist)):
+                who.time_exist[i] -= 1
             who.check()
+
 
         # сохранения
         # Todo: надо добавить сохранение сосотояния объектов market и exchange
         for p in self.players:
             p.save()
         self.save()
+
 
     # первый подсчет рейтинга
     def rate_calc_first(self):
@@ -262,10 +273,10 @@ class Game(object):
         sum_ = 0
 
         for p in self.players:
-            sum_ += p.value
+            sum_ += p.value[p.id_]
         part = sum_ / len(self.players)
         for i in range(len(self.players)):
-            rate.update({self.players_id[i]: (self.players[i].value / part)})
+            rate.update({self.players_id[i]: (self.players[i].value[self.players_id[i]] / part)})
 
         return rate
 
@@ -288,7 +299,7 @@ class Game(object):
     # прибавлене в фонды в конце хода
     def fund_move(self):
         for p in self.players:
-            p.income_value(p.calculate_profit())
+            p.value[p.id_] += p.calculate_profit()
 
     # сохранение настроек игры
     def save(self):
@@ -300,9 +311,9 @@ class Game(object):
     # производительные нужно создавать юниты
     def game_coef(self):
         coef_ = 0
-        min_fund_value = min_value_percent * sum(self.players.fund) / len(self.players)
+        min_fund_value = min_value_percent * sum([p.fund for p in self.players]) / len(self.players)
         for i in range(len(unit_coef)):
-            if min_value_percent > unit_coef[i]['prod']:
+            if min_fund_value > unit_coef[i]['prod']:
                 coef_ += 1
         return coef_
 
@@ -340,14 +351,14 @@ class Market(UnitSell):
     # создает юнитов, если их меньше нужного количества
     # и удаляет, если у них истекло время существования
     def check(self):
-        for i in range(len(self.units)):
-            if not self.units[i]:
-                self.units[i] = self.create_unit()
-                self.time_exist[i] = 5
+        for j in range(len(self.units)):
+            if not self.units[j]:
+                self.units[j] = self.create_unit()
+                self.time_exist[j] = 5
 
-            if self.time_exist[i] <= 0:
-                self.time_exist[i] = 1
-                self.units[i] = None
+            if self.time_exist[j] <= 0:
+                self.time_exist[j] = 1
+                self.units[j] = None
 
     # создание юнита на основе данных из файлы unit.py, рандомизирует
     # общий коэффициент rand_ и добавочную роизводительную мощь (для
@@ -380,12 +391,13 @@ class Exchange(UnitSell):
     # сохранене данных (прописанных в отцовском классе) о юните
     # в полях объекта exchange
     def add_unit(self, unit, player):
-        for i in range(self.units):
+        for i in range(len(self.units)):
             if not self.units[i]:
                 self.units[i] = unit
                 self.units[i].steps_to_create = unit.steps_to_create
                 self.seller[i] = player
                 self.time_exist[i] = 5
+                break
         player.units.remove(unit)
 
     # отправляет деньги владельцу юнита
@@ -409,4 +421,70 @@ class Exchange(UnitSell):
 данные из его класса (объекты класса Unit лежат в списке Player.units)
 '''
 
+
+
+
+
+# пусть словари с данными игроков - это следующий список:
+lst_player_data = [{'country': 'Russia', 'name': 'First'},
+                   {'country': 'Sweden', 'name': 'Second'},
+                   {'country': 'Russia', 'name': 'Third'},
+                   {'country': 'China', 'name': 'Fourth'}]
+
+players = []
+for i in range(len(lst_player_data)):
+    country = lst_player_data[i]['country']
+    name = lst_player_data[i]['name']
+    start_value = country_st[country][0]
+    start_gdp = country_st[country][1]
+    # здесь же определяем начальные значения для стран игроков
+    # основываясь на их выбранной стране
+
+    # Todo: сюда надо передать айдишник игрока
+    id_ = None
+    players.append(Player(id_, name, country, start_value, start_gdp))
+
+game = Game(players)
+
+
+units = []
+id_ = None
+cost = unit_coef[1]['cost']
+steps = unit_coef[1]['steps']
+prod = unit_coef[1]['prod']
+level = unit_coef[1]['level']
+unit = Unit(id_, cost, steps, prod, level)
+game.players[0].units.append(unit)
+
+
+print(game.__dict__)
+print(game.players[0].__dict__)
+print(game.players[0].units[0].__dict__)
+game.players[0].units[0].lvl_up()
+game.players[0].units[0].lvl_up()
+game.players[0].units[0].lvl_up()
+
+print(game.players[0].units[0].__dict__)
+print(game.market.__dict__)
+print(game.exchange.__dict__)
+
+game.next_move()
+game.next_move()
+
+print('--------------')
+print(game.__dict__)
+print(game.players[0].__dict__)
+print(game.players[0].units[0].__dict__)
+print(game.players[0].units[0].__dict__)
+print(game.market.__dict__)
+print(game.exchange.__dict__)
+
+print('------------')
+game.players[0].sell_unit(game.players[0].units[0])
+print(game.exchange.__dict__)
+game.players[1].value[game.players_id[1]] = 100000
+print('----')
+print(game.players[1].units)
+game.players[1].buy_unit(0, game.exchange)
+print(game.players[1].units)
 

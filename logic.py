@@ -76,7 +76,9 @@ class MarketExchangeUnits(object):
     # зависят от момента игры, ведь с ростом фонда появится нужда в более
     # производительных юнитах)
     def market_open(self, event):
+        conn = Connection()
         self.gui_window_name = "market"
+        market_units = conn.get_market_units()
         pass
 
     # аналогичная функция для изменения переменных, выводимых на экран
