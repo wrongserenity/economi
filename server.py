@@ -134,7 +134,7 @@ class TcpServer(tornado.tcpserver.TCPServer):
     def run_(self):
         # configuration
         host = '0.0.0.0'
-        port = 8008
+        port = 48777
 
         # tcp server
         self.listen(port, host)
@@ -145,6 +145,7 @@ class TcpServer(tornado.tcpserver.TCPServer):
 
 
 server = TcpServer()
+server.run_()
 
 
 
