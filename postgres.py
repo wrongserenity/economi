@@ -4,9 +4,9 @@ import logging
 
 # TODO: add try:.. except... wrappers
 class PostgresConnection:
-    def __init__(self, configs):
+    def __init__(self, configs="dbname='postgres' user='postgres' host='localhost' password='89/b/3?!MK'"):
         try:
-            self.__conn = pg.connect(**configs)
+            self.__conn = pg.connect(configs)
         except pg.Error as e:
             logging.critical("%s occurred while connecting PostgreSQL Database" % str(e))
     

@@ -119,7 +119,7 @@ class EconomiTcpServer(object):
 
 
 class TcpServer(tornado.tcpserver.TCPServer):
-    mongo_connection = mongo.MongoConnection()
+    mongo_connection = mongo.MongoConnection("test-database", 'test-col')
     postgres_connection = postgres.PostgresConnection()
 
     @tornado.gen.coroutine
@@ -145,6 +145,7 @@ class TcpServer(tornado.tcpserver.TCPServer):
 
 
 server = TcpServer()
+server.run_()
 
 
 

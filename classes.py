@@ -7,8 +7,8 @@ import copy
 # from for_server import game, market, exchange
 
 import random
-pg_conn = PostgresConnection()
-mongo_conn = MongoConnection()
+# pg_conn = PostgresConnection()
+# mongo_conn = MongoConnection()
 
 
 class Player(object):
@@ -40,7 +40,7 @@ class Player(object):
             self.id_ = str(random.randint(1, 100))
             '''
 
-            self.value = {self.id_: start_value}
+            # self.value = {self.id_: start_value}
 
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
@@ -381,7 +381,7 @@ for i in range(len(lst_player_data)):
     # Todo: сюда надо передать айдишник игрока
     id_ = None
     players.append(Player(id_, name, country, start_value, start_gdp))
-
+"""
 game = Game(players)
 
 
@@ -426,3 +426,4 @@ print(game.players[1].units)
 game.players[1].buy_unit(0, game.exchange)
 print(game.players[1].units)
 
+"""
