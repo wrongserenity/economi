@@ -3,27 +3,75 @@ import config
 from postgres import PostgresConnection
 from mongo import MongoConnection
 from unit import unit_coef, level_coef, pages, min_value_percent
-import copy
 # from for_server import game, market, exchange
-
+from country import *
+import asyncio
+import tornado
+import json
 import random
-# pg_conn = PostgresConnection()
-# mongo_conn = MongoConnection()
+
+import pdb
+
+
+class Connection(object):
+    client = tornado.tcpclient.TCPClient()
+    loop = asyncio.get_event_loop()
+
+    def __init__(self, ip="0.0.0.0", port="8008"):
+        self.HOST = ip
+        self.PORT = port
+
+    @staticmethod
+    def format_(obj, out=False):
+        return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
+
+    async def __send_request(self, msg):
+        stream = await self.client.connect(self.HOST, self.PORT)
+        stream.write(self.format_(msg, out=True))
+        response = await stream.read_until(b"\n")
+        return self.format_(response)
+
+    def get_units(self, uid):
+        return self.__request({"action": "get_units", "args": {"uid": uid}})
+
+    def get_unit(self, unit_id):
+        return self.__request({"action": "get_unit", "args": {"unit_id": unit_id}})
+
+    def get_user_data(self, uid):
+        return self.__request({"action": "get_user_data", "args": {"uid": uid}})
+    
+    def get_market_units(self):
+        return self.__request({"action":"get_market_units", "args": {}})
+
+    def set_user_data(self, user_dict):
+        return self.__request({"action": "set_user_data", "args": {"user_dict": user_dict}})
+
+    def update_user_data(self, user_dict):
+        return self.__request({"action": "update_user_data", "args": {"user_dict": user_dict}})
+
+    def remove_unit(self, owner_id, unit_id):
+        return self.__request({"action": "remove_unit", "args": {"unit_id": unit_id}})
+
+    def new_unit(self, unit_dict):
+        return self.__request({"action": "new_unit", "args": {"unit_dict": unit_dict}})
+
+    def update_unit(self, unit_id, new_dict):
+        return self.__request({"action": "update_unit", "args": {"unit_id": unit_id, "unit_dict": new_dict}})
+
+    def get_uid(self):
+        return self.__request({"action": "get_uid"})
+
+    def __request(self, req):
+        return self.loop.run_until_complete(self.__send_request(req))
 
 
 class Player(object):
-    country_st = {'Russia': [700, 1.09],
-                  'USA': [400, 1.2],
-                  'German': [550, 1.12],
-                  'China': [300, 1.25],
-                  'Sweden': [500, 1.17]}
-
-    def __init__(self, id_, name, country, start_value, start_gdp):
+    def __init__(self, id_, name, country_, start_value, start_gdp):
         if not id_:
             # имя игрока, нз зачем оно
             self.name = name
             # страна, выбранная игроком
-            self.country = country
+            self.country = country_
             # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
             # Todo: надо разграничить понятие фонда в пересчете на общую валюту
             # Todo Nick: чё? давай сам займешься экономической фигней
@@ -34,32 +82,40 @@ class Player(object):
             self.gdp = start_gdp
             # список юнитов (объектов класса Unit)
             self.units = []
+
+
             # сохраненние данных
+            conn = Connection()
+            self.id_ = conn.set_user_data(self.__dict__)
+
             '''
             random.seed()
             self.id_ = str(random.randint(1, 100))
             '''
 
-            # self.value = {self.id_: start_value}
+            self.value = {self.id_: start_value}
 
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
-        elif id_ and not name and not country and not start_value and not start_gdp:
+        else:
             self.id_ = id_
             # опять сохраняет данные для игрока
-            user_data = pg_conn.get_data(id_)
+            conn = Connection()
+            user_data = conn.get_user_data(id_)
             self.name = user_data[1]
             self.country = user_data[2]
             self.value = user_data[3]
             self.gdp = user_data[4]
-            units_data = mongo_conn.get_units(id_)
+            units_data = conn.get_units(id_)
             self.units = []
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
 
+
     def save(self):
-        dict_ = copy.deepcopy(self.__dict__)
-        dict_.pop("unit")
-        pg_conn.update_data(dict_)
+        conn = Connection()
+        conn.update_user_data(self.__dict__)
+        pass
+
 
     # удаление юнита при уничтожении
     def remove_unit(self, unit):
@@ -119,13 +175,15 @@ class Player(object):
 
 class Unit(object):
     def __init__(self, id_, cost, steps, st_prod, level, data=None):
+        conn = Connection()
+
         if id_:
-            data = mongo_conn.get_unit(id_)
+            data = conn.get_unit(id_)
         if data:
             for key, val in data.items():
                 self.__setattr__(key, val)
                 return
-
+        
         # Todo: тут мы типа создаём unit? - да, но создается он в функциях других объектов
         #
         # задание полей id, кол-ва ходов для создания,
@@ -135,7 +193,8 @@ class Unit(object):
         self.productivity_ = st_prod
         self.level = level
         self.cost = cost
-        self.id_ = mongo_conn.new_unit(self.__dict__)
+        self.id_ = conn.new_unit(self.__dict__)
+
 
     # поднятие уровня юнита
     # производится подсчет новых значений , основываясь на
@@ -144,7 +203,8 @@ class Unit(object):
         self.level += 1
         self.productivity_ = round(self.productivity_ * level_coef[self.level - 1]['prod'])
         self.cost = round(self.cost * level_coef[self.level - 1]['prod'])
-        mongo_conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
+        conn = Connection()
+        conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
 
     def to_dict(self):
         return self.__dict__
@@ -155,12 +215,15 @@ class Unit(object):
 # отправляется в game.__init__, были все нужные игроки
 # больше сюда их во время игры добавлять не стоит
 class Game(object):
-    def __init__(self):
+    def __init__(self, players_):
+        self.players = players_
         self.players_id = []
-        self.players = []
+        for p in self.players:
+            self.players_id.append(p.id_)
         # курс прошлого хода
         self.old_rate = {}
         # курс нового хода
+        self.new_rate = self.rate_calc_first()
         # отражает мощность создаваемого юнита, ведь через некоторое
         # кол-во ходов игрокам будет не хватать слабых начальных юнитов
         self.unit_char = 0
@@ -170,10 +233,6 @@ class Game(object):
         self.market = Market()
         self.exchange = Exchange()
 
-    def start(self):
-        for p in self.players:
-            self.players_id.append(p.id_)
-        self.new_rate = self.rate_calc_first()
 
     # все действия для перехода на следующий ход
     def next_move(self):
@@ -363,6 +422,9 @@ class Exchange(UnitSell):
 '''
 
 
+
+
+
 # пусть словари с данными игроков - это следующий список:
 lst_player_data = [{'country': 'Russia', 'name': 'First'},
                    {'country': 'Sweden', 'name': 'Second'},
@@ -373,15 +435,15 @@ players = []
 for i in range(len(lst_player_data)):
     country = lst_player_data[i]['country']
     name = lst_player_data[i]['name']
-    start_value = Player.country_st[country][0]
-    start_gdp = Player.country_st[country][1]
+    start_value = country_st[country][0]
+    start_gdp = country_st[country][1]
     # здесь же определяем начальные значения для стран игроков
     # основываясь на их выбранной стране
 
     # Todo: сюда надо передать айдишник игрока
     id_ = None
     players.append(Player(id_, name, country, start_value, start_gdp))
-"""
+
 game = Game(players)
 
 
@@ -426,4 +488,3 @@ print(game.players[1].units)
 game.players[1].buy_unit(0, game.exchange)
 print(game.players[1].units)
 
-"""
