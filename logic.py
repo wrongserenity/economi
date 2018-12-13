@@ -36,7 +36,7 @@ class Connection(object):
     client = tornado.tcpclient.TCPClient()
     loop = asyncio.get_event_loop()
 
-    def __init__(self, ip="0.0.0.0", port="48777"):
+    def __init__(self, ip="193.187.172.195", port="8080"):
         self.HOST = ip
         self.PORT = port
 
@@ -46,7 +46,7 @@ class Connection(object):
 
     async def __send_request(self, msg):
         client = tornado.tcpclient.TCPClient()
-        stream = await client.connect("0.0.0.0", "48777")
+        stream = await client.connect("193.187.172.195", "8080")
         stream.write(bytes("fuck you\n", "utf-8"))
         #stream.write(self.format_(msg, out=True))
         response = await stream.read_until(b"\n")
