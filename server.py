@@ -163,7 +163,7 @@ class Player(object):
                   'China': [300, 1.25],
                   'Sweden': [500, 1.17]}
 
-    def __init__(self, id_, name, country, ):
+    def __init__(self, id_, name, country, value, gdp):
         if not id_:
             raise Exception("Oooops")
             #
