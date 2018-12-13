@@ -98,26 +98,6 @@ class MarketExchangeUnits(object):
     gui_window_name = None
     # переменные, в которые надо подгружать информацию с сервака
     # при нажатии на Market / Exchange / Units справа в окне
-    # label_86 price1
-    # label_87 prod1
-    # label_88 steps1
-    # label_89 level1
-
-    # label_54 price2
-    # label_55 prod2
-    # label_56 steps2
-    # label_57 level2
-
-    # label_58 price3
-    # label_66 prod3
-    # label_67 steps3
-    # label_68 level3
-
-    # label_44 price4
-    # label_47 prod4
-    # label_49 steps4
-    # label_51 level4
-
     # переход по страницам в Market, Exchange и Units
     def scroll_up(self, event):
         pass
@@ -134,78 +114,89 @@ class MarketExchangeUnits(object):
     # зависят от момента игры, ведь с ростом фонда появится нужда в более
     # производительных юнитах)
     def market_open(self, event):
-        conn = Connection()
-        market_units = conn.get_market_units()
-        self.price_1.setText(str(market_units[0]['price']))
-        self.prod_1.setText(str(market_units[0]['prod']))
-        self.steps_1.setText(str(market_units[0]['steps']))
-        self.level_1.setText(str(market_units[0]['level']))
+        global window_opened
+        if  window_opened != 'market':
+            conn = Connection()
+            market_units = conn.get_market_units()
+            self.price_1.setText(str(market_units[0]['price']))
+            self.prod_1.setText(str(market_units[0]['prod']))
+            self.steps_1.setText(str(market_units[0]['steps']))
+            self.level_1.setText(str(market_units[0]['level']))
 
-        self.price_2.setText(str(market_units[1]['price']))
-        self.prod_2.setText(str(market_units[1]['prod']))
-        self.steps_2.setText(str(market_units[1]['steps']))
-        self.level_2.setText(str(market_units[1]['level']))
+            self.price_2.setText(str(market_units[1]['price']))
+            self.prod_2.setText(str(market_units[1]['prod']))
+            self.steps_2.setText(str(market_units[1]['steps']))
+            self.level_2.setText(str(market_units[1]['level']))
 
-        self.price_3.setText(str(market_units[2]['price']))
-        self.prod_3.setText(str(market_units[2]['prod']))
-        self.steps_3.setText(str(market_units[2]['steps']))
-        self.level_3.setText(str(market_units[2]['level']))
+            self.price_3.setText(str(market_units[2]['price']))
+            self.prod_3.setText(str(market_units[2]['prod']))
+            self.steps_3.setText(str(market_units[2]['steps']))
+            self.level_3.setText(str(market_units[2]['level']))
 
-        self.price_4.setText(str(market_units[3]['price']))
-        self.prod_4.setText(str(market_units[3]['prod']))
-        self.steps_4.setText(str(market_units[3]['steps']))
-        self.level_4.setText(str(market_units[3]['level']))
+            self.price_4.setText(str(market_units[3]['price']))
+            self.prod_4.setText(str(market_units[3]['prod']))
+            self.steps_4.setText(str(market_units[3]['steps']))
+            self.level_4.setText(str(market_units[3]['level']))
+
+            window_opened = 'market'
 
     # аналогичная функция для изменения переменных, выводимых на экран
     # только тут должны "хранится" данные о юнитах, выставленных на
     # продажу другими игроками
     def exchange_open(self, event):
-        conn = Connection()
-        exchange_units = conn.get_exchange_units()
-        self.price_1.setText(str(exchange_units[0]['price']))
-        self.prod_1.setText(str(exchange_units[0]['prod']))
-        self.steps_1.setText(str(exchange_units[0]['steps']))
-        self.level_1.setText(str(exchange_units[0]['level']))
+        global window_opened
+        if window_opened != 'exchange':
+            conn = Connection()
+            exchange_units = conn.get_exchange_units()
+            self.price_1.setText(str(exchange_units[0]['price']))
+            self.prod_1.setText(str(exchange_units[0]['prod']))
+            self.steps_1.setText(str(exchange_units[0]['steps']))
+            self.level_1.setText(str(exchange_units[0]['level']))
 
-        self.price_2.setText(str(exchange_units[1]['price']))
-        self.prod_2.setText(str(exchange_units[1]['prod']))
-        self.steps_2.setText(str(exchange_units[1]['steps']))
-        self.level_2.setText(str(exchange_units[1]['level']))
+            self.price_2.setText(str(exchange_units[1]['price']))
+            self.prod_2.setText(str(exchange_units[1]['prod']))
+            self.steps_2.setText(str(exchange_units[1]['steps']))
+            self.level_2.setText(str(exchange_units[1]['level']))
 
-        self.price_3.setText(str(exchange_units[2]['price']))
-        self.prod_3.setText(str(exchange_units[2]['prod']))
-        self.steps_3.setText(str(exchange_units[2]['steps']))
-        self.level_3.setText(str(exchange_units[2]['level']))
+            self.price_3.setText(str(exchange_units[2]['price']))
+            self.prod_3.setText(str(exchange_units[2]['prod']))
+            self.steps_3.setText(str(exchange_units[2]['steps']))
+            self.level_3.setText(str(exchange_units[2]['level']))
 
-        self.price_4.setText(str(exchange_units[3]['price']))
-        self.prod_4.setText(str(exchange_units[3]['prod']))
-        self.steps_4.setText(str(exchange_units[3]['steps']))
-        self.level_4.setText(str(exchange_units[3]['level']))
+            self.price_4.setText(str(exchange_units[3]['price']))
+            self.prod_4.setText(str(exchange_units[3]['prod']))
+            self.steps_4.setText(str(exchange_units[3]['steps']))
+            self.level_4.setText(str(exchange_units[3]['level']))
+
+            window_opened = 'exchange'
 
     # опять же похожа функция, но выводит доступные игроку юниты
     def units_open(self, event):
-        conn = Connection()
-        units_units = conn.get_player_units()
-        self.price_1.setText(str(units_units[0]['price']))
-        self.prod_1.setText(str(units_units[0]['prod']))
-        self.steps_1.setText(str(units_units[0]['steps']))
-        self.level_1.setText(str(units_units[0]['level']))
+        global window_opened
+        if window_opened != 'units':
+            conn = Connection()
+            units_units = conn.get_player_units()
+            self.price_1.setText(str(units_units[0]['price']))
+            self.prod_1.setText(str(units_units[0]['prod']))
+            self.steps_1.setText(str(units_units[0]['steps']))
+            self.level_1.setText(str(units_units[0]['level']))
 
-        self.price_2.setText(str(units_units[1]['price']))
-        self.prod_2.setText(str(units_units[1]['prod']))
-        self.steps_2.setText(str(units_units[1]['steps']))
-        self.level_2.setText(str(units_units[1]['level']))
+            self.price_2.setText(str(units_units[1]['price']))
+            self.prod_2.setText(str(units_units[1]['prod']))
+            self.steps_2.setText(str(units_units[1]['steps']))
+            self.level_2.setText(str(units_units[1]['level']))
 
-        self.price_3.setText(str(units_units[2]['price']))
-        self.prod_3.setText(str(units_units[2]['prod']))
-        self.steps_3.setText(str(units_units[2]['steps']))
-        self.level_3.setText(str(units_units[2]['level']))
+            self.price_3.setText(str(units_units[2]['price']))
+            self.prod_3.setText(str(units_units[2]['prod']))
+            self.steps_3.setText(str(units_units[2]['steps']))
+            self.level_3.setText(str(units_units[2]['level']))
 
-        self.price_4.setText(str(units_units[3]['price']))
-        self.prod_4.setText(str(units_units[3]['prod']))
-        self.steps_4.setText(str(units_units[3]['steps']))
-        self.level_4.setText(str(units_units[3]['level']))
+            self.price_4.setText(str(units_units[3]['price']))
+            self.prod_4.setText(str(units_units[3]['prod']))
+            self.steps_4.setText(str(units_units[3]['steps']))
+            self.level_4.setText(str(units_units[3]['level']))
 
+            window_opened = 'units'
 
     # продажа или покупка юнитов
     # или поднять уровень юнита / продать
@@ -214,28 +205,68 @@ class MarketExchangeUnits(object):
     # x активна только в окне Units
     # должны срабатывать, только когда global ready_ - False
     def o1(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'market':
+            conn.buy_m(0)
+        elif window_opened == 'units':
+            conn.lvl_up(0)
+        elif window_opened == 'exchange':
+            conn.buy_ex(0)
 
     def x1(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'units':
+            conn.sell_un(0)
 
     def o2(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'market':
+            conn.buy_m(1)
+        elif window_opened == 'units':
+            conn.lvl_up(1)
+        elif window_opened == 'exchange':
+            conn.buy_ex(1)
 
     def x2(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'units':
+            conn.sell_un(0)
 
     def o3(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'market':
+            conn.buy_m(2)
+        elif window_opened == 'units':
+            conn.lvl_up(2)
+        elif window_opened == 'exchange':
+            conn.buy_ex(2)
 
     def x3(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'units':
+            conn.sell_un(0)
 
     def o4(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'market':
+            conn.buy_m(3)
+        elif window_opened == 'units':
+            conn.lvl_up(3)
+        elif window_opened == 'exchange':
+            conn.buy_ex(3)
 
     def x4(self, event):
-        pass
+        global window_opened
+        conn = Connection()
+        if window_opened == 'units':
+            conn.sell_un(0)
 
 
 # это тупо фон, чтобы при переходах не моргал рабочий стол

@@ -5,10 +5,70 @@ from mongo import MongoConnection
 from unit import unit_coef, level_coef, pages, min_value_percent
 import copy
 # from for_server import game, market, exchange
-
+import asyncio
+import tornado.tcpclient
+import json
 import random
-# pg_conn = PostgresConnection()
-# mongo_conn = MongoConnection()
+pg_conn = PostgresConnection()
+mongo_conn = MongoConnection()
+
+
+# todo: прописать новые функции, вызываемые игроком:
+# buy_m(p) - покупка юнита в маркете, принимает значение от 0 до 3 - положение юнита в списке
+#           должен вызывать функцию game.players[players_id.index(id)].buy_unit(p, 'market')
+# lvl_up(p) - поднятие уровня юнита игрока так же принимает значение от 0 до 3 - положение юнита в списке
+# buy_ex(p) - покупка юнита в exchange, так же принимает значение от 0 до 3 - положение юнита в списке
+# sell_un(p) - продажа юнита игрока
+class Connection(object):
+    client = tornado.tcpclient.TCPClient()
+    loop = asyncio.get_event_loop()
+
+    def __init__(self, ip="0.0.0.0", port="8008"):
+        self.HOST = ip
+        self.PORT = port
+
+    @staticmethod
+    def format_(obj, out=False):
+        return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
+
+    async def __send_request(self, msg):
+        stream = await self.client.connect(self.HOST, self.PORT)
+        stream.write(self.format_(msg, out=True))
+        response = await stream.read_until(b"\n")
+        return self.format_(response)
+
+    def get_units(self, uid):
+        return self.__request({"action": "get_units", "args": {"uid": uid}})
+
+    def get_unit(self, unit_id):
+        return self.__request({"action": "get_unit", "args": {"unit_id": unit_id}})
+
+    def get_user_data(self, uid):
+        return self.__request({"action": "get_user_data", "args": {"uid": uid}})
+
+    def get_market_units(self):
+        return self.__request({"action": "get_market_units", "args": {}})
+
+    def set_user_data(self, user_dict):
+        return self.__request({"action": "set_user_data", "args": {"user_dict": user_dict}})
+
+    def update_user_data(self, user_dict):
+        return self.__request({"action": "update_user_data", "args": {"user_dict": user_dict}})
+
+    def remove_unit(self, owner_id, unit_id):
+        return self.__request({"action": "remove_unit", "args": {"unit_id": unit_id}})
+
+    def new_unit(self, unit_dict):
+        return self.__request({"action": "new_unit", "args": {"unit_dict": unit_dict}})
+
+    def update_unit(self, unit_id, new_dict):
+        return self.__request({"action": "update_unit", "args": {"unit_id": unit_id, "unit_dict": new_dict}})
+
+    def get_uid(self):
+        return self.__request({"action": "get_uid"})
+
+    def __request(self, req):
+        return self.loop.run_until_complete(self.__send_request(req))
 
 
 class Player(object):
@@ -76,7 +136,13 @@ class Player(object):
     # валют других стран
     # если же денег не хватает и так, то не происходит ничего
     def buy_unit(self, position, who):
-        cost = who.units[position].cost
+        global game
+        if who == 'market':
+            global market
+            cost = market.units[position].cost
+        elif who == 'exchange':
+            global exchange
+            cost = exchange.units[position].cost
         if cost <= self.fund:
             if cost <= self.value[self.id_] * game.new_rate[self.id_]:
                 self.value[self.id_] -= round(cost / game.new_rate[self.id_])
@@ -392,7 +458,8 @@ for i in range(len(lst_player_data)):
     # Todo: сюда надо передать айдишник игрока
     id_ = None
     players.append(Player(id_, name, country, start_value, start_gdp))
-"""
+
+'''
 game = Game(players)
 
 
@@ -436,5 +503,4 @@ print('----')
 print(game.players[1].units)
 game.players[1].buy_unit(0, game.exchange)
 print(game.players[1].units)
-
-"""
+'''
