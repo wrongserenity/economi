@@ -48,8 +48,7 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_user_data(self, uid):
-        data = self.postgres_connection.get_data(uid)
-        game.players.append(Player(data['id'], data['name'], data['country'], data['start_value'], data["start_gpd"]))
+        game.players.append(Player(uid, None*4))
         if len(game.players) == 4:
             game.start()
 
@@ -157,7 +156,7 @@ class TcpServer(tornado.tcpserver.TCPServer):
 
 
 class Player(object):
-    def __init__(self, id_, name, country):
+    def __init__(self, id_, name, country, ):
         if not id_:
             country_st = {'Russia': [700, 1.09],
                           'USA': [400, 1.2],

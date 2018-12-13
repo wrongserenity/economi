@@ -82,24 +82,26 @@ class Player(object):
 
     def __init__(self, id_, name, country, start_value, start_gdp):
         if not id_:
-            # имя игрока, нз зачем оно
-            self.name = name
-            # страна, выбранная игроком
-            self.country = country
-            # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
-            # fund - это в пересчете на среднее значение валютного курса всех сбережений
-            self.fund = 0
-            # динамический gdp - сделано
-            self.start_gdp = start_gdp
-            # список юнитов (объектов класса Unit)
-            self.units = []
-            # сохраненние данных
-            '''
-            random.seed()
-            self.id_ = str(random.randint(1, 100))
-            '''
-
-            self.value = {self.id_: start_value}
+            raise Exception("Oooops")
+            #
+            # # имя игрока, нз зачем оно
+            # self.name = name
+            # # страна, выбранная игроком
+            # self.country = country
+            # # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
+            # # fund - это в пересчете на среднее значение валютного курса всех сбережений
+            # self.fund = 0
+            # # динамический gdp - сделано
+            # self.start_gdp = start_gdp
+            # # список юнитов (объектов класса Unit)
+            # self.units = []
+            # # сохраненние данных
+            # '''
+            # random.seed()
+            # self.id_ = str(random.randint(1, 100))
+            # '''
+            #
+            # self.value = {self.id_: start_value}
 
         # todo: тут нао добавить сохранение нового поля start_gdp и gdp
         # start_gdp - это изначально значение gdp у игрока
@@ -111,13 +113,19 @@ class Player(object):
             user_data = pg_conn.get_data(id_)
             self.name = user_data[1]
             self.country = user_data[2]
-            self.value = user_data[3]
+            self.value = {id_: user_data[3]}
             self.start_gdp = user_data[4]
             self.gdp = user_data[4]
             units_data = mongo_conn.get_units(id_)
             self.units = []
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
+        else:
+            self.id = id_
+            self.name = name
+            self.country = country
+            self.gdp = start_gdp
+            self.value = {id_: start_value}
 
     def save(self):
         dict_ = copy.deepcopy(self.__dict__)
