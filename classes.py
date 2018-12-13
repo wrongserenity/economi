@@ -7,8 +7,8 @@ import copy
 # from for_server import game, market, exchange
 
 import random
-pg_conn = PostgresConnection()
-mongo_conn = MongoConnection()
+# pg_conn = PostgresConnection()
+# mongo_conn = MongoConnection()
 
 
 class Player(object):
@@ -392,8 +392,7 @@ for i in range(len(lst_player_data)):
     # Todo: сюда надо передать айдишник игрока
     id_ = None
     players.append(Player(id_, name, country, start_value, start_gdp))
-
-'''
+"""
 game = Game(players)
 
 
@@ -437,4 +436,5 @@ print('----')
 print(game.players[1].units)
 game.players[1].buy_unit(0, game.exchange)
 print(game.players[1].units)
-'''
+
+"""
