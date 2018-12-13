@@ -11,7 +11,7 @@ class PostgresConnection:
             logging.critical("%s occurred while connecting PostgreSQL Database" % str(e))
     
     def __cursor(self):
-        return self.__conn.__cursor()
+        return self.__conn.cursor()
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
@@ -42,7 +42,7 @@ class PostgresConnection:
     # TODO: should return dict
     def set_data(self, user_dict):
         with self.__cursor() as cur:
-            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (user_dict.values()))
+            cur.execute("INSERT INTO users_table VALUES (%s, %s, %s, %s)", (*list(user_dict.values())))
             return self.get_uid()
 
     def update_data(self, user_dict):
