@@ -47,8 +47,8 @@ class Connection(object):
     async def __send_request(self, msg):
         client = tornado.tcpclient.TCPClient()
         stream = await client.connect("193.187.172.195", "8080")
-        stream.write(bytes("fuck you\n", "utf-8"))
-        #stream.write(self.format_(msg, out=True))
+        # stream.write(bytes("fuck you\n", "utf-8"))
+        stream.write(self.format_(msg, out=True))
         response = await stream.read_until(b"\n")
         return self.format_(response)
 
@@ -552,13 +552,13 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             pdb.set_trace()
             self.gui = Gui()
             self.dict_.update({'name': self.lineEdit.text()})
-            '''
+
             conn = Connection()
             uid = conn.set_user_data(self.dict_)
             self.dict_.update({'id': uid})
             with open("data.json", "w") as file:
                 file.write(self.dict_['id'])
-            '''
+
             self.gui.showFullScreen()
             self.close()
             # тут надо передать даныые из словаря серверу
