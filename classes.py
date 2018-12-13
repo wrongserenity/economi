@@ -25,7 +25,7 @@ class Connection(object):
     client = tornado.tcpclient.TCPClient()
     loop = asyncio.get_event_loop()
 
-    def __init__(self, ip="0.0.0.0", port="8008"):
+    def __init__(self, ip="193.187.172.195", port="8080"):
         self.HOST = ip
         self.PORT = port
 
