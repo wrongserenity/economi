@@ -25,13 +25,10 @@ class Player(object):
             # страна, выбранная игроком
             self.country = country
             # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
-            # Todo: надо разграничить понятие фонда в пересчете на общую валюту
-            # Todo Nick: чё? давай сам займешься экономической фигней
-            # Todo Remen': это просто чтобы ты понимал, что происходит, а то я поменял немного концепцию
             # fund - это в пересчете на среднее значение валютного курса всех сбережений
             self.fund = 0
-            # ту хрень можно сделать динамичной, зависящей от курса, но эт потом
-            self.gdp = start_gdp
+            # динамический gdp - сделано
+            self.start_gdp = start_gdp
             # список юнитов (объектов класса Unit)
             self.units = []
             # сохраненние данных
@@ -40,8 +37,11 @@ class Player(object):
             self.id_ = str(random.randint(1, 100))
             '''
 
-            # self.value = {self.id_: start_value}
+            self.value = {self.id_: start_value}
 
+        # todo: тут нао добавить сохранение нового поля start_gdp и gdp
+        # start_gdp - это изначально значение gdp у игрока
+        # gdp - это последне значение ddp
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
             self.id_ = id_
@@ -50,6 +50,7 @@ class Player(object):
             self.name = user_data[1]
             self.country = user_data[2]
             self.value = user_data[3]
+            self.start_gdp = user_data[4]
             self.gdp = user_data[4]
             units_data = mongo_conn.get_units(id_)
             self.units = []
@@ -94,6 +95,12 @@ class Player(object):
             self.units.append(who.send_unit(position))
             if who == game.exchange:
                 game.exchange.send_money(cost, position)
+
+    def buy_value(self, value, id_):
+        seller = game.players[game.players_id.index(id_)]
+        self.value[game.players_id(id_)] += value
+        self.value[self.id_] -= round(value * game.new_rate[id_] / game.new_rate[self.id_])
+        seller.value[seller.id_] -= value
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
@@ -236,6 +243,10 @@ class Game(object):
         for i in range(len(self.players)):
             rate.update({self.players[i].id_: (fund[i] / sum_)})
         return rate
+
+    def gdp_calc(self):
+        for p in self.players:
+            p.gdp = self.new_rate[p.id_] * p.start_gdp
 
     # прибавлене в фонды в конце хода
     def fund_move(self):

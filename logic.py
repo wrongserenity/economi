@@ -7,7 +7,7 @@ import g_main_menu
 import g_player_menu
 import background
 import g_pl_menu_plus_st_menu
-import tornado
+import tornado.tcpclient
 import asyncio
 import os
 import json
@@ -21,6 +21,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # страной и сохраняет в полях класса игрока
 player_start_data = {}
 players_data = []
+window_opened = 'market'
+player_opened = None
+
+
 ready_ = False
 
 
@@ -32,7 +36,7 @@ class Connection(object):
     client = tornado.tcpclient.TCPClient()
     loop = asyncio.get_event_loop()
 
-    def __init__(self, ip="0.0.0.0", port="8008"):
+    def __init__(self, ip="0.0.0.0", port="48777"):
         self.HOST = ip
         self.PORT = port
 
@@ -41,8 +45,10 @@ class Connection(object):
         return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     async def __send_request(self, msg):
-        stream = await self.client.connect(self.HOST, self.PORT)
-        stream.write(self.format_(msg, out=True))
+        client = tornado.tcpclient.TCPClient()
+        stream = await client.connect("0.0.0.0", "48777")
+        stream.write(bytes("fuck you\n", "utf-8"))
+        #stream.write(self.format_(msg, out=True))
         response = await stream.read_until(b"\n")
         return self.format_(response)
 
@@ -113,12 +119,8 @@ class MarketExchangeUnits(object):
     # label_51 level4
 
     # переход по страницам в Market, Exchange и Units
-    class ScrollUp(object):
-        def __init__(self, gui_window_name):
-            self.gui_window_name = gui_window_name
-
-        def __call__(self, event):
-            pass
+    def scroll_up(self, event):
+        pass
 
     def scroll_down(self, event):
         pass
@@ -133,21 +135,77 @@ class MarketExchangeUnits(object):
     # производительных юнитах)
     def market_open(self, event):
         conn = Connection()
-        self.gui_window_name = "market"
         market_units = conn.get_market_units()
-        pass
+        self.price_1.setText(str(market_units[0]['price']))
+        self.prod_1.setText(str(market_units[0]['prod']))
+        self.steps_1.setText(str(market_units[0]['steps']))
+        self.level_1.setText(str(market_units[0]['level']))
+
+        self.price_2.setText(str(market_units[1]['price']))
+        self.prod_2.setText(str(market_units[1]['prod']))
+        self.steps_2.setText(str(market_units[1]['steps']))
+        self.level_2.setText(str(market_units[1]['level']))
+
+        self.price_3.setText(str(market_units[2]['price']))
+        self.prod_3.setText(str(market_units[2]['prod']))
+        self.steps_3.setText(str(market_units[2]['steps']))
+        self.level_3.setText(str(market_units[2]['level']))
+
+        self.price_4.setText(str(market_units[3]['price']))
+        self.prod_4.setText(str(market_units[3]['prod']))
+        self.steps_4.setText(str(market_units[3]['steps']))
+        self.level_4.setText(str(market_units[3]['level']))
 
     # аналогичная функция для изменения переменных, выводимых на экран
     # только тут должны "хранится" данные о юнитах, выставленных на
     # продажу другими игроками
     def exchange_open(self, event):
-        self.gui_window_name = "exchange"
-        pass
+        conn = Connection()
+        exchange_units = conn.get_exchange_units()
+        self.price_1.setText(str(exchange_units[0]['price']))
+        self.prod_1.setText(str(exchange_units[0]['prod']))
+        self.steps_1.setText(str(exchange_units[0]['steps']))
+        self.level_1.setText(str(exchange_units[0]['level']))
+
+        self.price_2.setText(str(exchange_units[1]['price']))
+        self.prod_2.setText(str(exchange_units[1]['prod']))
+        self.steps_2.setText(str(exchange_units[1]['steps']))
+        self.level_2.setText(str(exchange_units[1]['level']))
+
+        self.price_3.setText(str(exchange_units[2]['price']))
+        self.prod_3.setText(str(exchange_units[2]['prod']))
+        self.steps_3.setText(str(exchange_units[2]['steps']))
+        self.level_3.setText(str(exchange_units[2]['level']))
+
+        self.price_4.setText(str(exchange_units[3]['price']))
+        self.prod_4.setText(str(exchange_units[3]['prod']))
+        self.steps_4.setText(str(exchange_units[3]['steps']))
+        self.level_4.setText(str(exchange_units[3]['level']))
 
     # опять же похожа функция, но выводит доступные игроку юниты
     def units_open(self, event):
-        self.gui_window_name = "units"
-        pass
+        conn = Connection()
+        units_units = conn.get_player_units()
+        self.price_1.setText(str(units_units[0]['price']))
+        self.prod_1.setText(str(units_units[0]['prod']))
+        self.steps_1.setText(str(units_units[0]['steps']))
+        self.level_1.setText(str(units_units[0]['level']))
+
+        self.price_2.setText(str(units_units[1]['price']))
+        self.prod_2.setText(str(units_units[1]['prod']))
+        self.steps_2.setText(str(units_units[1]['steps']))
+        self.level_2.setText(str(units_units[1]['level']))
+
+        self.price_3.setText(str(units_units[2]['price']))
+        self.prod_3.setText(str(units_units[2]['prod']))
+        self.steps_3.setText(str(units_units[2]['steps']))
+        self.level_3.setText(str(units_units[2]['level']))
+
+        self.price_4.setText(str(units_units[3]['price']))
+        self.prod_4.setText(str(units_units[3]['prod']))
+        self.steps_4.setText(str(units_units[3]['steps']))
+        self.level_4.setText(str(units_units[3]['level']))
+
 
     # продажа или покупка юнитов
     # или поднять уровень юнита / продать
@@ -194,33 +252,44 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
         self.setupUi(self)
 
         # закрытие меню игрока и открытие обычного меню
-        self.label_20.mousePressEvent = self.menu_open
-        self.label_4.mousePressEvent = self.player_cl
+        self.menu.mousePressEvent = self.menu_open
+        self.exit.mousePressEvent = self.player_cl
 
         # market, exchange, units
-        self.label.mousePressEvent = self.market_open
-        self.label_2.mousePressEvent = self.exchange_open
-        self.label_3.mousePressEvent = self.units_open
+        self.market.mousePressEvent = self.market_open
+        self.exchange.mousePressEvent = self.exchange_open
+        self.units.mousePressEvent = self.units_open
 
-        self.label_70.mousePressEvent = self.o1
-        self.label_74.mousePressEvent = self.x1
-        self.label_68.mousePressEvent = self.o2
-        self.label_73.mousePressEvent = self.x2
-        self.label_61.mousePressEvent = self.o3
-        self.label_71.mousePressEvent = self.x3
-        self.label_67.mousePressEvent = self.o4
-        self.label_72.mousePressEvent = self.x4
+        self.o1.mousePressEvent = self.o1
+        self.x1.mousePressEvent = self.x1
+        self.o2.mousePressEvent = self.o2
+        self.x2.mousePressEvent = self.x2
+        self.o3.mousePressEvent = self.o3
+        self.x3.mousePressEvent = self.x3
+        self.o4.mousePressEvent = self.o4
+        self.x4.mousePressEvent = self.x4
 
-        self.label_19.mousePressEvent = self.next_move
+        self.next.mousePressEvent = self.next_move
+
+        self.buy.mousePressEvent = self.buy_value
 
         global ready_
         if ready_:
-            self.label_19.setText('wait')
+            self.next.setText('wait')
+
+    def buy_value(self, event):
+        global player_opened
+        conn = Connection()
+        if self.value_buy.text():
+            try:
+                conn.buy_value(int(self.value_buy.text()), player_opened)
+            except Exception:
+                pass
 
     def next_move(self, event):
         global ready_
         ready_ = True
-        self.label_19.setText('wait')
+        self.next.setText('wait')
 
     def menu_open(self, event):
         self.pl_and_sr_menu = PlayerAndStandartMenu()
@@ -228,6 +297,8 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
         self.close()
 
     def player_cl(self, event):
+        global player_opened
+        player_opened = None
         self.gui = Gui()
         self.gui.showFullScreen()
         self.close()
@@ -239,37 +310,50 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         super(PlayerAndStandartMenu, self).__init__(parent)
         self.setupUi(self)
 
-        self.label_61.mousePressEvent = self.close_cl
-        self.label_63.mousePressEvent = self.menu_hide
+        self.exit.mousePressEvent = self.close_cl
+        self.menu.mousePressEvent = self.menu_hide
 
-        self.label_4.mousePressEvent = self.player_cl
+        self.player_open.mousePressEvent = self.player_cl
 
         # market, echange, units
-        self.label.mousePressEvent = self.market_open
-        self.label_2.mousePressEvent = self.exchange_open
-        self.label_3.mousePressEvent = self.units_open
+        self.market.mousePressEvent = self.market_open
+        self.exchange.mousePressEvent = self.exchange_open
+        self.units.mousePressEvent = self.units_open
 
-        self.label_73.mousePressEvent = self.o1
-        self.label_77.mousePressEvent = self.x1
-        self.label_72.mousePressEvent = self.o2
-        self.label_76.mousePressEvent = self.x2
-        self.label_74.mousePressEvent = self.o3
-        self.label_78.mousePressEvent = self.x3
-        self.label_75.mousePressEvent = self.o4
-        self.label_79.mousePressEvent = self.x4
+        self.o1.mousePressEvent = self.o1
+        self.x1.mousePressEvent = self.x1
+        self.o2.mousePressEvent = self.o2
+        self.x2.mousePressEvent = self.x2
+        self.o3.mousePressEvent = self.o3
+        self.x3.mousePressEvent = self.x3
+        self.o4.mousePressEvent = self.o4
+        self.x4.mousePressEvent = self.x4
 
-        self.label_19.mousePressEvent = self.next_move
+        self.next.mousePressEvent = self.next_move
+
+        self.buy.mousePressEvent = self.buy_value
 
         global ready_
         if ready_:
-            self.label_19.setText('wait')
+            self.next.setText('wait')
+
+    def buy_value(self, event):
+        global player_opened
+        conn = Connection()
+        if self.value_buy.text():
+            try:
+                conn.buy_value(int(self.value_buy.text()), player_opened)
+            except Exception:
+                pass
 
     def next_move(self, event):
         global ready_
         ready_ = True
-        self.label_19.setText('wait')
+        self.next.setText('wait')
 
     def player_cl(self, event):
+        global player_opened
+        player_opened = None
         self.st_menu = StandartMenu()
         self.st_menu.showFullScreen()
         self.close()
@@ -291,38 +375,40 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
         # pdb.set_trace()
         self.setupUi(self)
 
-        self.label_61.mousePressEvent = self.close_cl
-        self.label_63.mousePressEvent = self.menu_hide
-        self.label_4.mousePressEvent = self.player_one
-        self.label_5.mousePressEvent = self.player_two
-        self.label_6.mousePressEvent = self.player_three
+        self.exit.mousePressEvent = self.close_cl
+        self.hide.mousePressEvent = self.menu_hide
+        self.player_1.mousePressEvent = self.player_one
+        self.player_2.mousePressEvent = self.player_two
+        self.player_3.mousePressEvent = self.player_three
 
         # market, echange, units
-        self.label.mousePressEvent = self.market_open
-        self.label_2.mousePressEvent = self.exchange_open
-        self.label_3.mousePressEvent = self.units_open
+        self.market.mousePressEvent = self.market_open
+        self.exchange.mousePressEvent = self.exchange_open
+        self.units.mousePressEvent = self.units_open
 
-        self.label_71.mousePressEvent = self.o1
-        self.label_75.mousePressEvent = self.x1
-        self.label_70.mousePressEvent = self.o2
-        self.label_74.mousePressEvent = self.x2
-        self.label_70.mousePressEvent = self.o3
-        self.label_74.mousePressEvent = self.x3
-        self.label_72.mousePressEvent = self.o4
-        self.label_76.mousePressEvent = self.x4
+        self.o1.mousePressEvent = self.o1
+        self.x1.mousePressEvent = self.x1
+        self.o2.mousePressEvent = self.o2
+        self.x2.mousePressEvent = self.x2
+        self.o3.mousePressEvent = self.o3
+        self.x3.mousePressEvent = self.x3
+        self.o4.mousePressEvent = self.o4
+        self.x4.mousePressEvent = self.x4
 
-        self.label_19.mousePressEvent = self.next_move
+        self.next.mousePressEvent = self.next_move
 
         global ready_
         if ready_:
-            self.label_19.setText('wait')
+            self.next.setText('wait')
 
     def next_move(self, event):
         global ready_
         ready_ = True
-        self.label_19.setText('wait')
+        self.next.setText('wait')
 
     def player_one(self, event):
+        global player_opened
+        player_opened = None
         self.player_open()
 
     def player_two(self, event):
@@ -346,48 +432,46 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
 
 
 # основное окно без открытых меню
-class Gui(QtWidgets.QMainWindow, g.Ui_MainWindow, MarketExchangeUnits):
+class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
     def __init__(self, parent=None):
-        self.st_menu = None
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
         # menu
-        self.label_20.mousePressEvent = self.menu_open
+        self.menu.mousePressEvent = self.menu_open
 
         # players
-        self.label_4.mousePressEvent = self.player_one
-        self.label_5.mousePressEvent = self.player_two
-        self.label_6.mousePressEvent = self.player_three
+        self.player_1.mousePressEvent = self.player_one
+        self.player_2.mousePressEvent = self.player_two
+        self.player_3.mousePressEvent = self.player_three
 
         # market, echange, units
-        self.label.mousePressEvent = self.market_open
-        self.label_2.mousePressEvent = self.exchange_open
-        self.label_3.mousePressEvent = self.units_open
+        self.market.mousePressEvent = self.market_open
+        self.exchange.mousePressEvent = self.exchange_open
+        self.units.mousePressEvent = self.units_open
 
-        self.label_90.mousePressEvent = self.o1
-        self.label_91.mousePressEvent = self.x1
-        self.label_62.mousePressEvent = self.o2
-        self.label_72.mousePressEvent = self.x2
-        self.label_69.mousePressEvent = self.o3
-        self.label_74.mousePressEvent = self.x3
-        self.label_61.mousePressEvent = self.o4
-        self.label_71.mousePressEvent = self.x4
+        self.o1.mousePressEvent = self.o1
+        self.x1.mousePressEvent = self.x1
+        self.o2.mousePressEvent = self.o2
+        self.x2.mousePressEvent = self.x2
+        self.o3.mousePressEvent = self.o3
+        self.x3.mousePressEvent = self.x3
+        self.o4.mousePressEvent = self.o4
+        self.x4.mousePressEvent = self.x4
 
-        scroll_up = self.ScrollUp(self.gui_window_name)
-        self.label_52.mousePressEvent = scroll_up
-        self.label_53.mousePressEvent = self.scroll_down
+        self.up.mousePressEvent = self.scroll_up
+        self.down.mousePressEvent = self.scroll_down
 
-        self.label_19.mousePressEvent = self.next_move
+        self.next.mousePressEvent = self.next_move
 
         global ready_
         if ready_:
-            self.label_19.setText('wait')
+            self.next.setText('wait')
 
     def next_move(self, event):
         global ready_
         ready_ = True
-        self.label_19.setText('wait')
+        self.next.setText('wait')
 
     def player_one(self, event):
         self.player_open()
@@ -429,15 +513,21 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
     def close_cl(self, event):
         QtCore.QCoreApplication.instance().quit()
 
+    # todo: после введения данных и отправки на сервак надо бы отправлять id другим игрокам, которые зайдут позже
+    # так же надо получать инофрмацию об id игроков5
     def text_name(self):
         if self.lineEdit.text():
+            import pdb
+            pdb.set_trace()
             self.gui = Gui()
             self.dict_.update({'name': self.lineEdit.text()})
+            '''
             conn = Connection()
             uid = conn.set_user_data(self.dict_)
             self.dict_.update({'id': uid})
             with open("data.json", "w") as file:
                 file.write(self.dict_['id'])
+            '''
             self.gui.showFullScreen()
             self.close()
             # тут надо передать даныые из словаря серверу
@@ -521,6 +611,8 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         self.close()
         if os.path.exists("data.json"):
             self._id = self.get_user_id()
+            global players_data
+            players_data.append(self._id)
             conn = Connection()
             data = conn.get_user_data(self._id)
             player_start_data = dict(id=self._id, **data)

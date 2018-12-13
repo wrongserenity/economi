@@ -3,8 +3,8 @@ from pymongo import MongoClient
 
 # TODO: write try:.. except.. wrappers
 class MongoConnection(object):
-    def __init__(self, db_name, col_name, **mongo_configs):
-        self.client = MongoClient(**mongo_configs)
+    def __init__(self, mongo_configs='mongodb://localhost:27017/', db_name='test-database', col_name='test-collection'):
+        self.client = MongoClient(mongo_configs)
         self.db = self.client[db_name]
         self.collection = self.db[col_name]
     
