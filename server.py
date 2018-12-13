@@ -20,10 +20,6 @@ import copy
 # from for_server import game, market, exchange
 
 import random
-pg_conn = PostgresConnection()
-mongo_conn = MongoConnection()
-
-game = Game()
 
 
 class EconomiTcpServer(object):
@@ -596,7 +592,10 @@ print(game.players[1].units)
 game.players[1].buy_unit(0, game.exchange)
 print(game.players[1].units)
 '''
+pg_conn = PostgresConnection()
+mongo_conn = MongoConnection()
 
+game = Game()
 
 server = TcpServer()
 server.run_()
