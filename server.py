@@ -192,6 +192,8 @@ class Player(object):
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
             self.id_ = id_
+            import pdb
+            pdb.set_trace()
             # опять сохраняет данные для игрока
             user_data = pg_conn.get_data(id_)
             self.name = user_data[1]

@@ -43,6 +43,7 @@ class PostgresConnection:
     def set_data(self, user_dict):
         with self.__cursor() as cur:
             cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s)", tuple(user_dict.values()))
+            self.__conn.commit()
             return self.get_uid()
 
     def update_data(self, user_dict):
