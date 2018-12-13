@@ -25,7 +25,7 @@ class Connection(object):
     client = tornado.tcpclient.TCPClient()
     loop = asyncio.get_event_loop()
 
-    def __init__(self, ip="0.0.0.0", port="8008"):
+    def __init__(self, ip="193.187.172.195", port="8080"):
         self.HOST = ip
         self.PORT = port
 
@@ -449,27 +449,29 @@ class Exchange(UnitSell):
 данные из его класса (объекты класса Unit лежат в списке Player.units)
 '''
 
-#
-# # пусть словари с данными игроков - это следующий список:
-# lst_player_data = [{'country': 'Russia', 'name': 'First'},
-#                    {'country': 'Sweden', 'name': 'Second'},
-#                    {'country': 'Russia', 'name': 'Third'},
-#                    {'country': 'China', 'name': 'Fourth'}]
-#
-# players = []
-# for i in range(len(lst_player_data)):
-#     country = lst_player_data[i]['country']
-#     name = lst_player_data[i]['name']
-#     start_value = Player.country_st[country][0]
-#     start_gdp = Player.country_st[country][1]
-#     # здесь же определяем начальные значения для стран игроков
-#     # основываясь на их выбранной стране
-#
-#     # Todo: сюда надо передать айдишник игрока
-#     id_ = None
-#     players.append(Player(id_, name, country, start_value, start_gdp))
 
+=======
 '''
+# пусть словари с данными игроков - это следующий список:
+lst_player_data = [{'country': 'Russia', 'name': 'First'},
+                   {'country': 'Sweden', 'name': 'Second'},
+                   {'country': 'Russia', 'name': 'Third'},
+                   {'country': 'China', 'name': 'Fourth'}]
+
+players = []
+for i in range(len(lst_player_data)):
+    country = lst_player_data[i]['country']
+    name = lst_player_data[i]['name']
+    start_value = Player.country_st[country][0]
+    start_gdp = Player.country_st[country][1]
+    # здесь же определяем начальные значения для стран игроков
+    # основываясь на их выбранной стране
+
+    # Todo: сюда надо передать айдишник игрока
+    id_ = None
+    players.append(Player(id_, name, country, start_value, start_gdp))
+
+
 game = Game(players)
 
 
