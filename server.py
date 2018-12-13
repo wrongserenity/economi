@@ -96,7 +96,7 @@ class EconomiTcpServer(object):
                 elif data['action'] == "get_user_data" and "uid" in data['args'].keys():
                     out = self.get_user_data(data['args']['uid'])
                 elif data['action'] == "set_user_data" and "user_dict" in data['args'].keys():
-                    value, gdp = Player.country_st[data['args']['user_dict']['name']]
+                    value, gdp = Player.country_st[data['args']['user_dict']['country']]
                     data['args']['user_dict'].update({'value':value, "gdb": gdp})
                     out = self.set_user_data(data['args']['user_dict'])
                 elif data['action'] == "update_user_data" and "user_dict" in data['args'].keys():
