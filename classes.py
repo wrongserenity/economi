@@ -449,6 +449,8 @@ class Exchange(UnitSell):
 данные из его класса (объекты класса Unit лежат в списке Player.units)
 '''
 
+
+=======
 '''
 # пусть словари с данными игроков - это следующий список:
 lst_player_data = [{'country': 'Russia', 'name': 'First'},
