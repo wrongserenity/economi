@@ -158,36 +158,38 @@ class TcpServer(tornado.tcpserver.TCPServer):
 
 
 class Player(object):
+    country_st = {'Russia': [700, 1.09],
+                  'USA': [400, 1.2],
+                  'German': [550, 1.12],
+                  'China': [300, 1.25],
+                  'Sweden': [500, 1.17]}
+
     def __init__(self, id_, name, country, ):
         if not id_:
-            country_st = {'Russia': [700, 1.09],
-                          'USA': [400, 1.2],
-                          'German': [550, 1.12],
-                          'China': [300, 1.25],
-                          'Sweden': [500, 1.17]}
-
-            # имя игрока, нз зачем оно
-            self.name = name
-            # страна, выбранная игроком
-            self.country = country
-            # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
-            # Todo: надо разграничить понятие фонда в пересчете на общую валюту
-            # Todo Nick: чё? давай сам займешься экономической фигней
-            # Todo Remen': это просто чтобы ты понимал, что происходит, а то я поменял немного концепцию
-            # fund - это в пересчете на среднее значение валютного курса всех сбережений
-            self.fund = country_st[country][0]
-            # ту хрень можно сделать динамичной, зависящей от курса, но эт потом
-            self.gdp = country_st[country][1]
-            # список юнитов (объектов класса Unit)
-            self.units = []
-            # сохраненние данных
-            '''
-            random.seed()
-            self.id_ = str(random.randint(1, 100))
-            '''
-
+            raise Exception("Oooops")
+            #
+            # # имя игрока, нз зачем оно
+            # self.name = name
+            # # страна, выбранная игроком
+            # self.country = country
+            # # стартовый капитал и ввп, выдаваемые в соответствии с выбранной страной
+            # # fund - это в пересчете на среднее значение валютного курса всех сбережений
+            # self.fund = 0
+            # # динамический gdp - сделано
+            # self.start_gdp = start_gdp
+            # # список юнитов (объектов класса Unit)
+            # self.units = []
+            # # сохраненние данных
+            # '''
+            # random.seed()
+            # self.id_ = str(random.randint(1, 100))
+            # '''
+            #
             # self.value = {self.id_: start_value}
 
+        # todo: тут нао добавить сохранение нового поля start_gdp и gdp
+        # start_gdp - это изначально значение gdp у игрока
+        # gdp - это последне значение ddp
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
             self.id_ = id_
@@ -195,12 +197,19 @@ class Player(object):
             user_data = pg_conn.get_data(id_)
             self.name = user_data[1]
             self.country = user_data[2]
-            self.value = user_data[3]
+            self.value = {id_: user_data[3]}
+            self.start_gdp = user_data[4]
             self.gdp = user_data[4]
             units_data = mongo_conn.get_units(id_)
             self.units = []
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
+        else:
+            self.id = id_
+            self.name = name
+            self.country = country
+            self.gdp = start_gdp
+            self.value = {id_: start_value}
 
     def save(self):
         dict_ = copy.deepcopy(self.__dict__)
@@ -245,6 +254,7 @@ class Player(object):
         seller = game.players[game.players_id.index(id_)]
         self.value[seller.id_] += value
         self.value[self.id_] -= round(value * game.new_rate[seller.id_] / game.new_rate[self.id_])
+        seller.value[seller.id_] -= value
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
