@@ -449,7 +449,7 @@ class Exchange(UnitSell):
 данные из его класса (объекты класса Unit лежат в списке Player.units)
 '''
 
-
+'''
 # пусть словари с данными игроков - это следующий список:
 lst_player_data = [{'country': 'Russia', 'name': 'First'},
                    {'country': 'Sweden', 'name': 'Second'},
@@ -469,7 +469,7 @@ for i in range(len(lst_player_data)):
     id_ = None
     players.append(Player(id_, name, country, start_value, start_gdp))
 
-'''
+
 game = Game(players)
 
 
