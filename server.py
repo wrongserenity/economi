@@ -49,6 +49,8 @@ class EconomiTcpServer(object):
             game.start()
 
     def set_user_data(self, user_dict):
+        import pdb
+        pdb.set_trace()
         res_id = self.postgres_connection.set_data(user_dict)
         game.players.append(Player(res_id, user_dict["name"], user_dict["country"],
                                    *Player.country_st.get(user_dict["country"])))
