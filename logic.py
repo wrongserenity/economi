@@ -494,6 +494,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.down.mousePressEvent = self.scroll_down
 
         self.next.mousePressEvent = self.next_move
+        self.player_value.setText('oop')
 
         global ready_
         if ready_:
@@ -557,7 +558,7 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             uid = conn.set_user_data(self.dict_)
             self.dict_.update({'id': uid})
             with open("data.json", "w") as file:
-                file.write(self.dict_['id'])
+                file.write(str(self.dict_['id']))
 
             self.gui.showFullScreen()
             self.close()

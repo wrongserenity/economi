@@ -206,7 +206,7 @@ class Player(object):
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
         else:
-            self.id = id_
+            self.id_ = id_
             self.name = name
             self.country = country
             self.gdp = start_gdp
