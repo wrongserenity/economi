@@ -54,6 +54,7 @@ class EconomiTcpServer(object):
 
     def get_user_data(self, uid):
         game.players.append(Player(uid, None, None, None, None))
+        game.players_id.append(uid)
         if len(game.players) == 4:
             game.start()
 
@@ -224,6 +225,7 @@ class Player(object):
             self.country = country
             self.gdp = start_gdp
             self.value = {id_: start_value}
+
 
     def save(self):
         dict_ = copy.deepcopy(self.__dict__)
