@@ -26,7 +26,9 @@ class PostgresConnection:
             user_id = int(user_id) if isinstance(user_id, str) else user_id
             cur.execute("SELECT * FROM users_table WHERE id = %s", (user_id, ))
             res = cur.fetchone()
-            res = list(res) if res else res
+            if not res:
+                return res
+            res = list(res)
             res[0] = int(res[0])
             return res
 
