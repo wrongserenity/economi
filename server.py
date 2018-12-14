@@ -106,10 +106,12 @@ class EconomiTcpServer(object):
                     out = self.remove_unit(data['args']['unit_id'])
                 elif data['action'] == "get_user_data" and "uid" in data['args'].keys():
                     out = self.get_user_data(data['args']['uid'])
+
                 elif data['action'] == "set_user_data" and "user_dict" in data['args'].keys():
                     value, gdp = Player.country_st[data['args']['user_dict']['country']]
-                    data['args']['user_dict'].update({'value': {data['args']['uid']: value}, "gdb": gdp})
+                    data['args']['user_dict'].update({'value': value, "gdb": gdp})
                     out = self.set_user_data(data['args']['user_dict'])
+
                 elif data['action'] == "update_user_data" and "user_dict" in data['args'].keys():
                     out = self.update_user_data(data['args']['user_dict'])
                 elif data['action'] == "new_unit" and "unit_dict" in data['args'].keys():
@@ -231,6 +233,10 @@ class Player(object):
         dict_ = copy.deepcopy(self.__dict__)
         dict_.pop("unit")
         pg_conn.update_data(dict_)
+
+    def get_default_val(self, uid, country):
+        return {uid: self.country_st[country][0]}, self.country_st[country][1]
+
 
     # удаление юнита при уничтожении
     def remove_unit(self, unit):
