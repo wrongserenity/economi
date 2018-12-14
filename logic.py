@@ -82,6 +82,9 @@ class Connection(object):
     def get_uid(self):
         return self.__request({"action": "get_uid"})
 
+    def get_player_data(self):
+        return self.__request({"action": "get_player_data", "args": {"unit_id": unit_id}})
+
     def __request(self, req):
         return self.loop.run_until_complete(self.__send_request(req))
 

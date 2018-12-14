@@ -44,11 +44,13 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_player_data(self, uid):
-        dict_ = {'id': uid}
-        position = game.players_id.index(uid)
-        args = ['value', 'gdp', ]
-        for arg in args:
-            dict_.update({arg: game.player[position].__dict__[arg]})
+        data = self.postgres_connection.get_data(uid)
+        return data
+        # dict_ = {'id': uid}
+        # position = game.players_id.index(uid)
+        # args = ['value', 'gdp']
+        # for arg in args:
+        #   dict_.update({arg: game.player[position].__dict__[arg]})
 
     def get_user_data(self, uid):
         game.players.append(Player(uid, None, None, None, None))
@@ -116,6 +118,8 @@ class EconomiTcpServer(object):
                     out = self.update_unit(data['args']['unit_id'], data['args']['unit_dict'])
                 elif data["action"] == "get_uid":
                     out = self.postgres_connection.get_uid()
+                elif data["action"] == "get_player_data":
+                    out = self.get_player_data(data["args"]["unit_id"])
                 else:
                     out = "Error occurred"
 
