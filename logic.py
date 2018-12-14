@@ -23,6 +23,7 @@ player_start_data = {}
 players_data = []
 window_opened = 'market'
 player_opened = None
+self_id = 0
 
 
 ready_ = False
@@ -471,6 +472,10 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
+        global self_id
+        conn = Connection()
+        self.data_ = conn.get_player_data(self_id)
+
         # menu
         self.menu.mousePressEvent = self.menu_open
 
@@ -497,7 +502,33 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.down.mousePressEvent = self.scroll_down
 
         self.next.mousePressEvent = self.next_move
-        self.player_value.setText('oop')
+
+        # вывод циферок
+        if self.data_[3][players_data[0]]:
+            self.bank_player_1.setText(self.data_[3][players_data[0]])
+        else:
+            self.bank_player_1.setText('0')
+
+        if self.data_[3][players_data[1]]:
+            self.bank_player_2.setText(self.data_[3][players_data[1]])
+        else:
+            self.bank_player_2.setText('0')
+
+        if self.data_[3][players_data[2]]:
+            self.bank_player_3.setText(self.data_[3][players_data[2]])
+        else:
+            self.bank_player_3.setText('0')
+
+        self.rate.setText(self.data_[5][self_id])
+        self.gdp.setText(self.data_[4])
+        self.player_value.setText(self.data_[3][self_id])
+
+        fund_temp = []
+        for id_ in players_data:
+            if self.data_[3][id_]:
+                fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
+        fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
+        self.player_fund.setText(fund)
 
         global ready_
         if ready_:
@@ -648,6 +679,8 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             import pdb
             pdb.set_trace()
             self._id = self.get_user_id()
+            global self_id
+            self_id = self._id
             global players_data
             players_data.append(self._id)
             conn = Connection()
