@@ -642,6 +642,8 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         self.ch_country.showFullScreen()
         self.close()
         if os.path.exists("data.json"):
+            import pdb
+            pdb.set_trace()
             self._id = self.get_user_id()
             global players_data
             players_data.append(self._id)
