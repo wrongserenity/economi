@@ -23,8 +23,11 @@ class PostgresConnection:
     # TODO: what outcome datatype is needed?
     def get_data(self, user_id):
         with self.__cursor() as cur:
+            user_id = int(user_id) if isinstance(user_id, str) else user_id
             cur.execute("SELECT * FROM users_table WHERE id = %s", (user_id, ))
-            return cur.fetchone()
+            res = cur.fetchone()
+            res[0] = int(res[0])
+            return res
 
     def get_uid(self):
         with self.__cursor() as cur:
