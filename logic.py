@@ -632,7 +632,7 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             with open("data.json", "r") as file:
                 data = file.read()
                 data_decoded =  json.loads(data)
-                return data_decoded.get('id')
+                return data_decoded
         except Exception as e:
             logging.critical(f"Error occured while trying to read file:\nError: \"{e}\"")
             return False
