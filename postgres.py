@@ -20,13 +20,13 @@ class PostgresConnection:
             logging.critical("%s occurred, can\'t save data, changes would be reverted" % str(e))
         self.__conn.close()
 
-    def get_game_data(self):
+    def get_game_data(self, uid):
         with self.__cursor() as cur:
             cur.execute("SELECT * FROM game_table")
             res = cur.fetchone()
             if not res:
-                return 0
-            return res[0]
+                return {uid: 0}
+            return res
         
     # TODO: what outcome datatype is needed?
     def get_data(self, user_id):
@@ -38,7 +38,7 @@ class PostgresConnection:
                 return None
             res = list(res)
             res[0] = int(res[0])
-            res.append(self.get_game_data())
+            res.append(self.get_game_data(user_id))
             return res
 
     def get_uid(self):

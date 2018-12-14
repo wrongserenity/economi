@@ -504,17 +504,17 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.next.mousePressEvent = self.next_move
 
         # вывод циферок
-        if self.data_[3][players_data[0]]:
+        if len(players_data) > 0 and self.data_[3][players_data[0]]:
             self.bank_player_1.setText(self.data_[3][players_data[0]])
         else:
             self.bank_player_1.setText('0')
 
-        if self.data_[3][players_data[1]]:
+        if len(players_data) > 1 and self.data_[3][players_data[1]]:
             self.bank_player_2.setText(self.data_[3][players_data[1]])
         else:
             self.bank_player_2.setText('0')
 
-        if self.data_[3][players_data[2]]:
+        if len(players_data) > 2 and self.data_[3][players_data[2]]:
             self.bank_player_3.setText(self.data_[3][players_data[2]])
         else:
             self.bank_player_3.setText('0')
