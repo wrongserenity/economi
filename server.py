@@ -43,6 +43,13 @@ class EconomiTcpServer(object):
     def get_unit(self, unit_id):
         return self.mongo_connection.get_unit(unit_id)
 
+    def get_player_data(self, uid):
+        dict_ = {'id': uid}
+        position = game.players_id.index(uid)
+        args = ['value', 'gdp', ]
+        for arg in args:
+            dict_.update({arg: game.player[position].__dict__[arg]})
+
     def get_user_data(self, uid):
         game.players.append(Player(uid, None, None, None, None))
         if len(game.players) == 4:
