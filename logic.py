@@ -519,9 +519,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         else:
             self.bank_player_3.setText('0')
 
-        self.rate.setText(self.data_[5][self_id])
-        self.gdp.setText(self.data_[4])
-        self.player_value.setText(self.data_[3][self_id])
+        self.rate.setText(str(self.data_[5][self_id]))
+        self.gdp.setText(str(self.data_[4]))
+        self.player_value.setText(str(self.data_[3][self_id]))
 
         fund_temp = []
         for id_ in players_data:
@@ -594,7 +594,7 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
                 file.write(str(self.dict_['id']))
 
             global self_id
-            self_id = self.dict_['id']
+            self_id = str(self.dict_['id'])
             self.gui = Gui()
             self.gui.showFullScreen()
             self.close()
