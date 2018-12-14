@@ -55,7 +55,7 @@ class PostgresConnection:
     # TODO: should return dict
     def set_data(self, user_dict):
         with self.__cursor() as cur:
-            user_dict['values'] = json.dumps(user_dict['values'])
+            user_dict['value'] = json.dumps(user_dict['value'])
             cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s)", tuple(user_dict.values()))
             self.__conn.commit()
             return self.get_uid()

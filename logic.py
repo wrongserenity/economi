@@ -585,7 +585,6 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
         if self.lineEdit.text():
             import pdb
             pdb.set_trace()
-            self.gui = Gui()
             self.dict_.update({'name': self.lineEdit.text()})
 
             conn = Connection()
@@ -594,6 +593,9 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             with open("data.json", "w") as file:
                 file.write(str(self.dict_['id']))
 
+            global self_id
+            self_id = self.dict_['id']
+            self.gui = Gui()
             self.gui.showFullScreen()
             self.close()
             # тут надо передать даныые из словаря серверу
