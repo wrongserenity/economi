@@ -23,7 +23,7 @@ class PostgresConnection:
     # TODO: what outcome datatype is needed?
     def get_data(self, user_id):
         with self.__cursor() as cur:
-            cur.execute("SELECT * FROM users_table WHERE user_id = %s", (user_id, ))
+            cur.execute("SELECT * FROM users_table WHERE id = %s", (user_id, ))
             return cur.fetchone()
 
     def get_uid(self):
