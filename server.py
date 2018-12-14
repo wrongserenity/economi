@@ -44,7 +44,7 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_user_data(self, uid):
-        game.players.append(Player(uid, None*4))
+        game.players.append(Player(uid, None, None, None, None))
         if len(game.players) == 4:
             game.start()
 
