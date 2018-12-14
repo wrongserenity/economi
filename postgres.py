@@ -27,7 +27,7 @@ class PostgresConnection:
             cur.execute("SELECT * FROM users_table WHERE id = %s", (user_id, ))
             res = cur.fetchone()
             if not res:
-                return res
+                return None
             res = list(res)
             res[0] = int(res[0])
             return res
