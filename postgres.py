@@ -24,6 +24,8 @@ class PostgresConnection:
         with self.__cursor() as cur:
             cur.execute("SELECT * FROM game_table")
             res = cur.fetchone()
+            if not res:
+                return 0
             return res[0]
         
     # TODO: what outcome datatype is needed?
