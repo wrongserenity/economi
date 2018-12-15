@@ -44,7 +44,8 @@ class PostgresConnection:
     def get_uid(self):
         with self.__cursor() as cur:
             cur.execute("SELECT currval(pg_get_serial_sequence('users_table', 'id'))")
-            return int(cur.fetchone())
+            res = cur.fetchone()
+            return int(res) if res else 0
 
     def get_many(self, user_id_list):
         with self.__cursor() as cur:
@@ -53,15 +54,16 @@ class PostgresConnection:
                 cur.execute(user_id)
                 return cur.fetchall()
                 
-    # TODO: update number of values     
+    # TODO: updatec number of values
     # TODO: should return dict
     def set_data(self, user_dict):
         with self.__cursor() as cur:
-            user_dict['value'] = json.dumps({int(self.get_uid()) + 1: user_dict['value']}) \
-                if isinstance(user_dict['value'], int) else json.dumps(user_dict['value'])
-            cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s)", tuple(user_dict.values()))
+            cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict.values()))
+            id_ = cur.fetchone()
+            user_dict['value'] = {id_: user_dict['value']}
+            self.update_data({"id": id_, **user_dict})
             self.__conn.commit()
-            return self.get_uid()
+            return id_
 
     def update_data(self, user_dict):
         with self.__cursor() as cur:
