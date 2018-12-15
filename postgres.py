@@ -44,7 +44,7 @@ class PostgresConnection:
     def get_uid(self):
         with self.__cursor() as cur:
             cur.execute("SELECT max(id) from users_table")
-            return int(cur.fetchone()[0])
+            return int(cur.fetchone())
 
     def get_many(self, user_id_list):
         with self.__cursor() as cur:
