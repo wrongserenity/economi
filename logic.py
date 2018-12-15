@@ -493,9 +493,6 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
-        import pdb
-        pdb.set_trace()
-
         global players_ids
         global self_id
         conn = Connection()

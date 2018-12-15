@@ -128,8 +128,6 @@ class EconomiTcpServer(object):
                     out = self.get_player_data(data["args"]["uid"])
 
                 elif data['action'] == 'get_game_data':
-                    import pdb
-                    pdb.set_trace()
                     self.postgres_connection.update_game_data(game.new_rate)
                     out = self.postgres_connection.get_game_data()
                 else:
