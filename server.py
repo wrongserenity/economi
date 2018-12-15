@@ -114,6 +114,13 @@ class EconomiTcpServer(object):
                     data['args']['user_dict'].update({'value': value, "gdb": gdp})
                     out = self.set_user_data(data['args']['user_dict'])
 
+                elif data['action'] == "get_other":
+                    data = [player.to_dict() for player in game.players if player.id not in [data['args']['id'],
+                                                                                             *data['args']['other']]]
+                    out = data
+                elif data['action'] == 'update':
+                    out = [player.to_dict() for player in game.players]
+
                 elif data['action'] == "update_user_data" and "user_dict" in data['args'].keys():
                     out = self.update_user_data(data['args']['user_dict'])
                 elif data['action'] == "new_unit" and "unit_dict" in data['args'].keys():

@@ -11,6 +11,7 @@ import tornado.tcpclient
 import asyncio
 import os
 import json
+import time
 import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -20,7 +21,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 # сервер отправляет в ответ id и все данные связанные с выбранной
 # страной и сохраняет в полях класса игрока
 player_start_data = {}
+players_ids = []
 players_data = []
+
 window_opened = 'market'
 player_opened = None
 self_id = 0
@@ -58,6 +61,9 @@ class Connection(object):
 
     def get_unit(self, unit_id):
         return self.__request({"action": "get_unit", "args": {"unit_id": unit_id}})
+
+    def get_other(self, uid, other):
+        return self.__request({"action": "get_other", "args": {"id": uid, "other": other}})
 
     def get_user_data(self, uid):
         return self.__request({"action": "get_user_data", "args": {"uid": uid}})
@@ -288,7 +294,7 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
 
         # закрытие меню игрока и открытие обычного меню
         self.menu.mousePressEvent = self.menu_open
-        self.exit.mousePressEvent = self.player_cl
+        # self.exit.mousePressEvent = self.player_cl
 
         # market, exchange, units
         self.market.mousePressEvent = self.market_open
@@ -466,6 +472,15 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
         self.close()
 
 
+def wait_players(my_id, cur):
+    conn = Connection()
+    other = conn.get_other(my_id, cur)
+    if not other:
+        time.sleep(5)
+        other = wait_players(my_id, cur)
+    return other
+
+
 # основное окно без открытых меню
 class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
     def __init__(self, parent=None):
@@ -504,8 +519,8 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.next.mousePressEvent = self.next_move
 
         # вывод циферок
-        global players_data
-        players_data = [str(id_) for id_ in players_data]
+        global players_ids
+        players_ids = [str(id_) for id_ in players_ids]
         #
         # for id_ in [str(id_) for id_ in players_data]:
         #     if self.data_[3][id_]:
@@ -514,18 +529,18 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         #     else:
         #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}").set_
 
-        if len(players_data) > 0 and self.data_[3][players_data[0]]:
+        if len(players_ids) > 0 and self.data_[3][players_ids[0]]:
             self.bank_player_1.setText()
         else:
             self.bank_player_1.setText('0')
 
-        if len(players_data) > 1 and self.data_[3][players_data[1]]:
-            self.bank_player_2.setText(str(self.data_[3][players_data[1]]))
+        if len(players_ids) > 1 and self.data_[3][players_ids[1]]:
+            self.bank_player_2.setText(str(self.data_[3][players_ids[1]]))
         else:
             self.bank_player_2.setText('0')
 
-        if len(players_data) > 2 and self.data_[3][players_data[2]]:
-            self.bank_player_3.setText(str(self.data_[3][players_data[2]]))
+        if len(players_ids) > 2 and self.data_[3][players_ids[2]]:
+            self.bank_player_3.setText(str(self.data_[3][players_ids[2]]))
         else:
             self.bank_player_3.setText('0')
 
@@ -535,7 +550,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.player_value.setText(str(self.data_[3][self_id]))
 
         fund_temp = []
-        for id_ in players_data:
+        for id_ in players_ids:
             if self.data_[3][id_]:
                 fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
@@ -545,6 +560,16 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         pdb.set_trace()
         unit_profit = sum([unit['productivity_'] for unit in player_start_data['units']])
         self.unit.setText(str(unit_profit))
+
+        res = 0
+        while not res:
+            other = wait_players(player_start_data['id'], players_ids)
+            if other == "Full":
+                res = 1
+            else:
+                players_ids.append(other['id'])
+                players_data.append(other)
+                # do
 
         global ready_
         if ready_:
