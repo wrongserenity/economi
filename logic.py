@@ -541,8 +541,10 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
         self.player_fund.setText(str(fund))
 
-        unit_profit =
-        self.unit
+        import pdb
+        pdb.set_trace()
+        unit_profit = sum([unit['productivity_'] for unit in player_start_data['units']])
+        self.unit.setText(str(unit_profit))
 
         global ready_
         if ready_:
