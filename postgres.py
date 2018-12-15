@@ -25,7 +25,7 @@ class PostgresConnection:
             if cur.execute("SELECT * FROM game_table"):
                 cur.execute("UPDATE game_table SET rate = %s", (json.dumps(rates)))
             else:
-                cur.execute("INSERT game_table SET rate = %s", (json.dumps(rates)))
+                cur.execute("INSERT INTO game_table SET rate = %s", (json.dumps(rates)))
             cur.execute("SELECT * FROM game_table")
             res = cur.fetchone()
             if not res:
