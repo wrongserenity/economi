@@ -25,7 +25,7 @@ class PostgresConnection:
             cur.execute("SELECT * FROM game_table")
             res = cur.fetchone()
             if not res:
-                return {uid: 0}
+                return {uid: 1}
             return res
         
     # TODO: what outcome datatype is needed?
