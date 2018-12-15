@@ -493,6 +493,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
+        import pdb
+        pdb.set_trace()
+
         global players_ids
         global self_id
         conn = Connection()
@@ -507,7 +510,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
                 players_data.append(other)
                 # do
         self.data_ = conn.get_player_data(self_id)
-        self.data_.append(conn.get_game_data())
+        self.data_.append(json.loads(conn.get_game_data()))
 
         # menu
         self.menu.mousePressEvent = self.menu_open
