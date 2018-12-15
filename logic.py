@@ -504,6 +504,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.next.mousePressEvent = self.next_move
 
         # вывод циферок
+        global players_data
         players_data = [str(id_) for id_ in players_data]
         if len(players_data) > 0 and self.data_[3][players_data[0]]:
             self.bank_player_1.setText(self.data_[3][players_data[0]])
