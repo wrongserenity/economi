@@ -95,6 +95,8 @@ class Connection(object):
     def __request(self, req):
         return self.loop.run_until_complete(self.__send_request(req))
 
+    def get_game_data(self):
+        return self.__request({'action': "get_game_data"})
 
 
 # отвечает за нажатие на кнопку "buy" в поле покупки валюты
@@ -505,7 +507,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
                 players_data.append(other)
                 # do
         self.data_ = conn.get_player_data(self_id)
-        self.data_.
+        self.data_.append(conn.get_game_data())
 
         # menu
         self.menu.mousePressEvent = self.menu_open

@@ -126,6 +126,9 @@ class EconomiTcpServer(object):
                     out = self.postgres_connection.get_uid()
                 elif data["action"] == "get_player_data":
                     out = self.get_player_data(data["args"]["uid"])
+
+                elif data['action'] == 'get_game_data':
+                    out = self.postgres_connection.get_game_data()
                 else:
                     out = "Error occurred"
 
