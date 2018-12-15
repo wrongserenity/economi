@@ -61,8 +61,8 @@ class PostgresConnection:
             user_dict['value'] = json.dumps({0: user_dict['value']})
             cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict.values()))
             id_ = cur.fetchone()[0]
-            user_dict['value'] = {id_: user_dict['value'][0]}
-            self.update_data({"id": id_, **user_dict})
+            cur.execute('UPDATE users_table SET value = %s WHERE id = %s',
+                        (json.dumps({id_: user_dict['value'].get(0)}, id_)))
             self.__conn.commit()
             return id_
 
