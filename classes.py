@@ -450,7 +450,6 @@ class Exchange(UnitSell):
 '''
 
 
-=======
 '''
 # пусть словари с данными игроков - это следующий список:
 lst_player_data = [{'country': 'Russia', 'name': 'First'},

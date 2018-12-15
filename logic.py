@@ -475,6 +475,8 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
 def wait_players(my_id, cur):
     import pdb
     pdb.set_trace()
+    if len(players_ids) == 3:
+        return 'Full'
     conn = Connection()
     other = conn.get_other(my_id, cur)
     other = other[0] if other else False
@@ -491,8 +493,19 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
+        global players_ids
         global self_id
         conn = Connection()
+
+        res = 0
+        while not res:
+            other = wait_players(player_start_data['id'], players_ids)
+            if other == "Full":
+                res = 1
+            else:
+                players_ids.append(other['id'])
+                players_data.append(other)
+                # do
         self.data_ = conn.get_player_data(self_id)
 
         # menu
@@ -523,8 +536,11 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.next.mousePressEvent = self.next_move
 
         # вывод циферок
-        global players_ids
         players_ids = [str(id_) for id_ in players_ids]
+        try:
+            players_ids.remove(self_id)
+        except:
+            pass
         #
         # for id_ in [str(id_) for id_ in players_data]:
         #     if self.data_[3][id_]:
@@ -533,17 +549,17 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         #     else:
         #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}").set_
 
-        if len(players_ids) > 0 and self.data_[3][players_ids[0]]:
+        if len(players_ids) > 0 and players_ids[0] in list(self.data_[3].keys()):
             self.bank_player_1.setText()
         else:
             self.bank_player_1.setText('0')
 
-        if len(players_ids) > 1 and self.data_[3][players_ids[1]]:
+        if len(players_ids) > 1 and players_ids[0] in list(self.data_[3].keys()):
             self.bank_player_2.setText(str(self.data_[3][players_ids[1]]))
         else:
             self.bank_player_2.setText('0')
 
-        if len(players_ids) > 2 and self.data_[3][players_ids[2]]:
+        if len(players_ids) > 2 and players_ids[0] in list(self.data_[3].keys()):
             self.bank_player_3.setText(str(self.data_[3][players_ids[2]]))
         else:
             self.bank_player_3.setText('0')
@@ -555,7 +571,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
 
         fund_temp = []
         for id_ in players_ids:
-            if self.data_[3][id_]:
+            if id_ in list(self.data_[3].keys()):
                 fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
         self.player_fund.setText(str(fund))
@@ -564,16 +580,6 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         pdb.set_trace()
         unit_profit = sum([unit['productivity_'] for unit in player_start_data['units']])
         self.unit.setText(str(unit_profit))
-
-        res = 0
-        while not res:
-            other = wait_players(player_start_data['id'], players_ids)
-            if other == "Full":
-                res = 1
-            else:
-                players_ids.append(other['id'])
-                players_data.append(other)
-                # do
 
         global ready_
         if ready_:

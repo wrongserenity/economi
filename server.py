@@ -44,7 +44,7 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_player_data(self, uid):
-        data = self.postgres_connection.get_data(uid)
+        data = self.postgres_connection.get_data(uid, game.new_rate)
         return data
         # dict_ = {'id': uid}
         # position = game.players_id.index(uid)
@@ -375,6 +375,7 @@ class Game(object):
         for p in self.players:
             self.players_id.append(p.id)
         self.new_rate = self.rate_calc_first()
+
 
     # все действия для перехода на следующий ход
     def next_move(self):
