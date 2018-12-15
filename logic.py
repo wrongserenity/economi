@@ -506,8 +506,16 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         # вывод циферок
         global players_data
         players_data = [str(id_) for id_ in players_data]
+        #
+        # for id_ in [str(id_) for id_ in players_data]:
+        #     if self.data_[3][id_]:
+        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}")\
+        #             .setText(str(self.data_[3][players_data[0]]))
+        #     else:
+        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}").set_
+
         if len(players_data) > 0 and self.data_[3][players_data[0]]:
-            self.bank_player_1.setText(str(self.data_[3][players_data[0]]))
+            self.bank_player_1.setText()
         else:
             self.bank_player_1.setText('0')
 
@@ -520,6 +528,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
             self.bank_player_3.setText(str(self.data_[3][players_data[2]]))
         else:
             self.bank_player_3.setText('0')
+
         self_id = str(self_id)
         self.rate.setText(str(self.data_[5][self_id]))
         self.gdp.setText(str(self.data_[4]))
@@ -531,6 +540,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
                 fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
         self.player_fund.setText(str(fund))
+
+        unit_profit =
+        self.unit
 
         global ready_
         if ready_:
@@ -683,8 +695,6 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             self._id = self.get_user_id()
             global self_id
             self_id = self._id
-            global players_data
-            players_data.append(self._id)
             conn = Connection()
             data = conn.get_user_data(self._id)
             player_start_data = dict(**data)

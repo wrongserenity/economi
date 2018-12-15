@@ -59,7 +59,7 @@ class EconomiTcpServer(object):
         game.players_id.append(uid)
         if len(game.players) == 4:
             game.start()
-        return game.players[-1].__dict__
+        return game.players[-1].to_dict()
 
     def set_user_data(self, user_dict):
         import pdb
@@ -230,6 +230,10 @@ class Player(object):
             self.gdp = start_gdp
             self.value = {id_: start_value} if isinstance(start_value, int) else start_value
 
+    def to_dict(self):
+        dict_ = self.__dict__
+        dict_['units'] = [unit.to_dict() for unit in self.units]
+        return dict_
 
     def save(self):
         dict_ = copy.deepcopy(self.__dict__)
