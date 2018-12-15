@@ -53,8 +53,6 @@ class EconomiTcpServer(object):
         #   dict_.update({arg: game.player[position].__dict__[arg]})
 
     def get_user_data(self, uid):
-        import pdb
-        pdb.set_trace
         game.players.append(Player(uid, None, None, None, None))
         game.players_id.append(uid)
         if len(game.players) == 4:
@@ -62,8 +60,6 @@ class EconomiTcpServer(object):
         return game.players[-1].to_dict()
 
     def set_user_data(self, user_dict):
-        import pdb
-        pdb.set_trace()
         res_id = self.postgres_connection.set_data(user_dict)
         game.players.append(Player(res_id, user_dict["name"], user_dict["country"],
                                    *Player.country_st.get(user_dict["country"])))
@@ -86,8 +82,6 @@ class EconomiTcpServer(object):
     @staticmethod
     def format_(obj, out=False):
         print(str(obj))
-        import pdb
-        pdb.set_trace()
         return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     @tornado.gen.coroutine
@@ -217,8 +211,6 @@ class Player(object):
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
             self.id = id_
-            import pdb
-            pdb.set_trace()
             # опять сохраняет данные для игрока
             user_data = pg_conn.get_data(id_)
             self.name = user_data[1]

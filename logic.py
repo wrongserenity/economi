@@ -473,8 +473,6 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
 
 
 def wait_players(my_id, cur):
-    import pdb
-    pdb.set_trace()
     if len(players_ids) == 3:
         return 'Full'
     conn = Connection()
@@ -576,8 +574,6 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
         self.player_fund.setText(str(fund))
 
-        import pdb
-        pdb.set_trace()
         unit_profit = sum([unit['productivity_'] for unit in player_start_data['units']])
         self.unit.setText(str(unit_profit))
 
@@ -634,15 +630,13 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
     # так же надо получать инофрмацию об id игроков5
     def text_name(self):
         if self.lineEdit.text():
-            import pdb
-            pdb.set_trace()
             self.dict_.update({'name': self.lineEdit.text()})
 
             conn = Connection()
             uid = conn.set_user_data(self.dict_)
             self.dict_.update({'id': uid})
-            with open("data.json", "w") as file:
-                file.write(str(self.dict_['id']))
+            # with open("data.json", "w") as file:
+            #     file.write(str(self.dict_['id']))
 
             global self_id
             self_id = str(self.dict_['id'])
@@ -719,7 +713,7 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         try:
             with open("data.json", "r") as file:
                 data = file.read()
-                data_decoded =  json.loads(data)
+                data_decoded = json.loads(data)
                 return data_decoded
         except Exception as e:
             logging.critical(f"Error occured while trying to read file:\nError: \"{e}\"")
@@ -729,8 +723,6 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         global player_start_data
         self.close()
         if os.path.exists("data.json"):
-            import pdb
-            pdb.set_trace()
             self._id = self.get_user_id()
             global self_id
             self_id = self._id

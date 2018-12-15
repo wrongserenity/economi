@@ -21,6 +21,8 @@ class PostgresConnection:
         self.__conn.close()
 
     def get_game_data(self, uid, rates):
+        import pdb
+        pdb.set_trace()
         with self.__cursor() as cur:
             if cur.execute("SELECT * FROM game_table"):
                 cur.execute("UPDATE game_table SET rate = %s", (json.dumps(rates)))
