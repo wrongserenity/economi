@@ -44,7 +44,7 @@ class EconomiTcpServer(object):
         return self.mongo_connection.get_unit(unit_id)
 
     def get_player_data(self, uid):
-        data = self.postgres_connection.get_data(uid, game.new_rate)
+        data = self.postgres_connection.get_data(uid)
         return data
         # dict_ = {'id': uid}
         # position = game.players_id.index(uid)
