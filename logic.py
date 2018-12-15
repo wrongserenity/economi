@@ -687,7 +687,7 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             players_data.append(self._id)
             conn = Connection()
             data = conn.get_user_data(self._id)
-            player_start_data = dict(id=self._id, **data)
+            player_start_data = dict(**data)
             # здесь надо открывать уже сразу окно игры и в брать данные с сервака (имя и странуб и т.д)
 
 

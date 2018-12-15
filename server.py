@@ -207,7 +207,7 @@ class Player(object):
         # gdp - это последне значение ddp
         # если игрок уже заходил в эту сессию, то он переподключается за себя же
         elif id_ and not name and not country and not start_value and not start_gdp:
-            self.id_ = id_
+            self.id = id_
             import pdb
             pdb.set_trace()
             # опять сохраняет данные для игрока
@@ -222,7 +222,7 @@ class Player(object):
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
         else:
-            self.id_ = id_
+            self.id = id_
             self.name = name
             self.country = country
             self.gdp = start_gdp
