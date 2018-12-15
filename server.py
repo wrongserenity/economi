@@ -216,7 +216,7 @@ class Player(object):
             user_data = pg_conn.get_data(id_)
             self.name = user_data[1]
             self.country = user_data[2]
-            self.value = {id_: user_data[3]}
+            self.value = {id_: user_data[3]} if isinstance(user_data[3], int) else user_data[3]
             self.start_gdp = user_data[4]
             self.gdp = user_data[4]
             units_data = mongo_conn.get_units(id_)
