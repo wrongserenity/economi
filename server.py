@@ -57,6 +57,7 @@ class EconomiTcpServer(object):
         game.players_id.append(uid)
         if len(game.players) == 4:
             game.start()
+        return game.players[-1].__dict__
 
     def set_user_data(self, user_dict):
         import pdb
@@ -106,7 +107,6 @@ class EconomiTcpServer(object):
                     out = self.remove_unit(data['args']['unit_id'])
                 elif data['action'] == "get_user_data" and "uid" in data['args'].keys():
                     out = self.get_user_data(data['args']['uid'])
-
                 elif data['action'] == "set_user_data" and "user_dict" in data['args'].keys():
                     value, gdp = Player.country_st[data['args']['user_dict']['country']]
                     data['args']['user_dict'].update({'value': value, "gdb": gdp})
