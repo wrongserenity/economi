@@ -656,7 +656,6 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
         self.label.mousePressEvent = self.clicked_start
         self.label_7.mousePressEvent = self.close_cl
 
-        self.ch_country = EnterCountry()
         self.bg = Background()
         self.bg.showFullScreen()
 
@@ -675,7 +674,6 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
 
     def clicked_start(self, event):
         global player_start_data
-        self.ch_country.showFullScreen()
         self.close()
         if os.path.exists("data.json"):
             import pdb
@@ -689,6 +687,11 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             data = conn.get_user_data(self._id)
             player_start_data = dict(**data)
             # здесь надо открывать уже сразу окно игры и в брать данные с сервака (имя и странуб и т.д)
+            self.gui = Gui()
+            self.gui.showFullScreen()
+        else:
+            self.ch_country = EnterCountry()
+            self.ch_country.showFullScreen()
 
 
 def main():

@@ -226,7 +226,7 @@ class Player(object):
             self.name = name
             self.country = country
             self.gdp = start_gdp
-            self.value = {id_: start_value}
+            self.value = {id_: start_value} if isinstance(start_value, int) start_value
 
 
     def save(self):
