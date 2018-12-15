@@ -641,7 +641,7 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             global self_id
             self_id = str(self.dict_['id'])
             global player_start_data
-            player_start_data = {"units": [], **self.dict}
+            player_start_data = {"units": [], **self.dict_}
             self.gui = Gui()
             self.gui.showFullScreen()
             self.close()
