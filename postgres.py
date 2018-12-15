@@ -20,9 +20,12 @@ class PostgresConnection:
             logging.critical("%s occurred, can\'t save data, changes would be reverted" % str(e))
         self.__conn.close()
 
-    def get_game_data(self, uid, rate):
+    def get_game_data(self, uid, rates):
         with self.__cursor() as cur:
-            cur.execute("UPDATE game_table SET rate = %s", (json.dumps(rate)))
+            if cur.execute("SELECT * FROM game_table"):
+                cur.execute("UPDATE game_table SET rate = %s", (json.dumps(rates)))
+            else:
+                cur.execute("INSERT game_table SET rate = %s", (json.dumps(rates)))
             cur.execute("SELECT * FROM game_table")
             res = cur.fetchone()
             if not res:
