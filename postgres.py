@@ -20,22 +20,21 @@ class PostgresConnection:
             logging.critical("%s occurred, can\'t save data, changes would be reverted" % str(e))
         self.__conn.close()
 
-    def get_game_data(self, uid, rates):
-        import pdb
-        pdb.set_trace()
+    def update_game_data(self, rates):
         with self.__cursor() as cur:
             if cur.execute("SELECT * FROM game_table"):
                 cur.execute("UPDATE game_table SET rate = %s", (json.dumps(rates)))
             else:
                 cur.execute("INSERT INTO game_table SET rate = %s", (json.dumps(rates)))
+        self.__conn.commit()
+
+    def get_game_data(self):
+        with self.__cursor() as cur:
             cur.execute("SELECT * FROM game_table")
-            res = cur.fetchone()
-            if not res:
-                return {uid: 1}
-            return res
+            return cur.fetchone()
         
     # TODO: what outcome datatype is needed?
-    def get_data(self, user_id, rate):
+    def get_data(self, user_id):
         with self.__cursor() as cur:
             user_id = int(user_id) if isinstance(user_id, str) else user_id
             cur.execute("SELECT * FROM users_table WHERE id = %s", (user_id, ))
@@ -44,7 +43,6 @@ class PostgresConnection:
                 return None
             res = list(res)
             res[0] = str(res[0])
-            res.append(self.get_game_data(user_id, rate))
             return res
 
     def get_uid(self):

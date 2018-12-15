@@ -505,6 +505,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
                 players_data.append(other)
                 # do
         self.data_ = conn.get_player_data(self_id)
+        self.data_.
 
         # menu
         self.menu.mousePressEvent = self.menu_open
