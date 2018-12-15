@@ -53,6 +53,8 @@ class EconomiTcpServer(object):
         #   dict_.update({arg: game.player[position].__dict__[arg]})
 
     def get_user_data(self, uid):
+        import pdb
+        pdb.set_trace
         game.players.append(Player(uid, None, None, None, None))
         game.players_id.append(uid)
         if len(game.players) == 4:
