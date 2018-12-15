@@ -236,6 +236,11 @@ class Player(object):
             self.country = country
             self.gdp = start_gdp
             self.value = {id_: start_value} if isinstance(start_value, int) else start_value
+            units_data = mongo_conn.get_units(id_)
+            self.units = []
+            for unit_data in units_data:
+                self.units.append(Unit(data=unit_data))
+
 
     def to_dict(self):
         dict_ = self.__dict__
