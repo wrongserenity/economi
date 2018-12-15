@@ -256,13 +256,13 @@ class Player(object):
     def buy_unit(self, position, who):
         cost = who.units[position].cost
         if cost <= self.fund:
-            if cost <= self.value[self.id_] * game.new_rate[self.id_]:
-                self.value[self.id_] -= round(cost / game.new_rate[self.id_])
+            if cost <= self.value[self.id] * game.new_rate[self.id]:
+                self.value[self.id] -= round(cost / game.new_rate[self.id])
             else:
-                cost -= round(self.value[self.id_] * game.new_rate[self.id_])
-                self.value[self.id_] = 0
+                cost -= round(self.value[self.id] * game.new_rate[self.id])
+                self.value[self.id] = 0
                 for id_ in game.players_id:
-                    if id_ == self.id_:
+                    if id_ == self.id:
                         continue
                     if self.value[id_] * game.new_rate[id_] < cost:
                         self.value[id_] = 0
@@ -276,13 +276,13 @@ class Player(object):
 
     def buy_value(self, value, id_):
         seller = game.players[game.players_id.index(id_)]
-        self.value[seller.id_] += value
-        self.value[self.id_] -= round(value * game.new_rate[seller.id_] / game.new_rate[self.id_])
-        seller.value[seller.id_] -= value
+        self.value[seller.id] += value
+        self.value[self.id] -= round(value * game.new_rate[seller.id] / game.new_rate[self.id])
+        seller.value[seller.id] -= value
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
-        return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id_])
+        return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id])
 
     # Todo: нз что ты тут написал
     # Несмотря на то, что это не ordered dict они всё ещё хранятся в порядке добавления, вроде как!!!
@@ -320,7 +320,7 @@ class Unit(object):
         self.productivity_ = st_prod
         self.level = level
         self.cost = cost
-        self.id_ = mongo_conn.new_unit(self.__dict__)
+        self.unit_id = mongo_conn.new_unit(self.__dict__)
 
     # поднятие уровня юнита
     # производится подсчет новых значений , основываясь на
@@ -329,7 +329,7 @@ class Unit(object):
         self.level += 1
         self.productivity_ = round(self.productivity_ * level_coef[self.level - 1]['prod'])
         self.cost = round(self.cost * level_coef[self.level - 1]['prod'])
-        mongo_conn.update_unit(self.identifier, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
+        mongo_conn.update_unit(self.unit_id, {'level': self.level, 'cost': self.cost, 'prod': self.productivity})
 
     def to_dict(self):
         return self.__dict__
@@ -357,7 +357,7 @@ class Game(object):
 
     def start(self):
         for p in self.players:
-            self.players_id.append(p.id_)
+            self.players_id.append(p.id)
         self.new_rate = self.rate_calc_first()
 
     # все действия для перехода на следующий ход
@@ -399,7 +399,7 @@ class Game(object):
         sum_ = 0
 
         for p in self.players:
-            sum_ += p.value[p.id_]
+            sum_ += p.value[p.id]
         part = sum_ / len(self.players)
         for i in range(len(self.players)):
             rate.update({self.players_id[i]: (self.players[i].value[self.players_id[i]] / part)})
@@ -430,7 +430,7 @@ class Game(object):
     # прибавлене в фонды в конце хода
     def fund_move(self):
         for p in self.players:
-            p.value[p.id_] += p.calculate_profit()
+            p.value[p.id] += p.calculate_profit()
 
     # сохранение настроек игры
     def save(self):
@@ -534,7 +534,7 @@ class Exchange(UnitSell):
     # отправляет деньги владельцу юнита
     # обнуляет все данные о юните, расположенном на i-той позиции
     def send_money(self, cost, position):
-        self.seller[position].value[self.seller[position].id_] += round(cost * game.new_rate[self.seller[position].id_])
+        self.seller[position].value[self.seller[position].id] += round(cost * game.new_rate[self.seller[position].id])
         self.seller[position] = None
 
     # проверка на уже залежавшиеся юниты
