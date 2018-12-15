@@ -415,7 +415,7 @@ class Game(object):
         sum_ = 0
 
         for p in self.players:
-            sum_ += p.value[p.id]
+            sum_ += p.value[str(p.id)]
         part = sum_ / len(self.players)
         for i in range(len(self.players)):
             rate.update({self.players_id[i]: (self.players[i].value[self.players_id[i]] / part)})

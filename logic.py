@@ -473,9 +473,13 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
 
 
 def wait_players(my_id, cur):
+    import pdb
+    pdb.set_trace()
     conn = Connection()
     other = conn.get_other(my_id, cur)
+    other = other[0] if other else False
     if not other:
+        print('waiting..')
         time.sleep(5)
         other = wait_players(my_id, cur)
     return other
@@ -636,6 +640,8 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
 
             global self_id
             self_id = str(self.dict_['id'])
+            global player_start_data
+            player_start_data = {"units": [], **self.dict}
             self.gui = Gui()
             self.gui.showFullScreen()
             self.close()
