@@ -43,7 +43,7 @@ class PostgresConnection:
 
     def get_uid(self):
         with self.__cursor() as cur:
-            cur.execute("SELECT max(id) from users_table")
+            cur.execute("SELECT currval(pg_get_serial_sequence('users_table', 'id'))")
             return int(cur.fetchone())
 
     def get_many(self, user_id_list):
