@@ -27,7 +27,7 @@ class PostgresConnection:
             if cur.execute("SELECT * FROM game_table"):
                 cur.execute("UPDATE game_table SET rate = %s", json.dumps(rates))
             else:
-                cur.execute("INSERT INTO game_table SET rate = %s", json.dumps(rates))
+                cur.execute("INSERT INTO game_table VALUES(%s)", json.dumps(rates))
         self.__conn.commit()
 
     def get_game_data(self):
