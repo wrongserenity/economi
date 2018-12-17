@@ -82,8 +82,6 @@ class EconomiTcpServer(object):
     @staticmethod
     def format_(obj, out=False):
         print(str(obj))
-        import pdb
-        pdb.set_trace()
         return bytes(f'{json.dumps(obj)}\n', "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     @tornado.gen.coroutine
@@ -96,6 +94,8 @@ class EconomiTcpServer(object):
         try:
             while True:
                 line = yield self.stream.read_until(b'\n')
+                import pdb
+                pdb.set_trace()
                 data = self.format_(line)
                 if data['action'] == "get_units" and "uid" in data['args'].keys():
                     out = self.get_units(data['args']['uid'])
