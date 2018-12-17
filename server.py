@@ -82,6 +82,8 @@ class EconomiTcpServer(object):
     @staticmethod
     def format_(obj, out=False):
         print(str(obj))
+        import pdb
+        pdb.set_trace()
         return bytes(f'{json.dumps(obj)}\n', "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     @tornado.gen.coroutine
