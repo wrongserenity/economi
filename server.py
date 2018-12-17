@@ -82,7 +82,7 @@ class EconomiTcpServer(object):
     @staticmethod
     def format_(obj, out=False):
         print(str(obj))
-        return bytes(f"{json.dumps(obj)}\n", "utf-8") if out else json.loads(obj.decode("utf-8"))
+        return bytes(f'{json.dumps(obj)}\n', "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     @tornado.gen.coroutine
     def on_disconnect(self):
