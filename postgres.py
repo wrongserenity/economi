@@ -34,7 +34,7 @@ class PostgresConnection:
     def get_game_data(self):
         with self.__cursor() as cur:
             cur.execute("SELECT * FROM game_table")
-            return cur.fetchone()
+            return json.dumps(cur.fetchone())
         
     # TODO: what outcome datatype is needed?
     def get_data(self, user_id):

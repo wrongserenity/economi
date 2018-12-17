@@ -497,6 +497,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         global self_id
         conn = Connection()
 
+        import pdb
+        pdb.set_trace()
+
         res = 0
         while not res:
             other = wait_players(player_start_data['id'], players_ids)
