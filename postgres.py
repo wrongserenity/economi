@@ -24,7 +24,8 @@ class PostgresConnection:
         with self.__cursor() as cur:
             import pdb
             pdb.set_trace()
-            if cur.execute("SELECT * FROM game_table"):
+            cur.execute("SELECT * FROM game_table")
+            if cur.fetchone():
                 # TODO: Если не работает, юзай ' одинарные кавычки
                 cur.execute("UPDATE game_table SET rate = \'{}\'".format(-json.dumps(rates)))
             else:

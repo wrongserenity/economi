@@ -569,7 +569,7 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
             self.bank_player_3.setText('0')
 
         self_id = str(self_id)
-        self.rate.setText(str(self.data_[5][self_id]))
+        self.rate.setText(str(self.data_[5][0][self_id]))
         self.gdp.setText(str(self.data_[4]))
         self.player_value.setText(str(self.data_[3][self_id]))
 
