@@ -27,7 +27,7 @@ class PostgresConnection:
             cur.execute("SELECT * FROM game_table")
             if cur.fetchone():
                 # TODO: Если не работает, юзай ' одинарные кавычки
-                cur.execute("UPDATE game_table SET rate = \'{}\'".format(-json.dumps(rates)))
+                cur.execute("UPDATE game_table SET rate = \'{}\'".format(json.dumps(rates)))
             else:
                 cur.execute("INSERT INTO game_table(rate) VALUES (\'{}\')".format(json.dumps(rates)))
         self.__conn.commit()
