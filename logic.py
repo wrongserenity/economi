@@ -497,9 +497,6 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         global self_id
         conn = Connection()
 
-        import pdb
-        pdb.set_trace()
-
         res = 0
         while not res:
             other = wait_players(player_start_data['id'], players_ids)
@@ -569,7 +566,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
             self.bank_player_3.setText('0')
 
         self_id = str(self_id)
-        self.rate.setText(str(self.data_[5][0][self_id]))
+        # TODO: БОЛЬШОЙ КОСТЫЛЬ
+        self.data_[5] = self.data_[5][0]
+        self.rate.setText(str(self.data_[5][self_id]))
         self.gdp.setText(str(self.data_[4]))
         self.player_value.setText(str(self.data_[3][self_id]))
 
@@ -577,6 +576,8 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         for id_ in players_ids:
             if id_ in list(self.data_[3].keys()):
                 fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
+        import pdb
+        pdb.set_trace()
         fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
         self.player_fund.setText(str(fund))
 
