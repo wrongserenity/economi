@@ -205,6 +205,8 @@ class InterfaceClicks(object):
         unit_profit = round(sum([unit['productivity_'] for unit in player_start_data['units']]))
         self.unit.setText(str(unit_profit))
 
+        self.player.setText(self.data_[1])
+
     # вывод fund и имен других игроков
     def players_data_out(self):
         for i in range(len(players_ids)):
