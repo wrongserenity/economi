@@ -132,6 +132,28 @@ class EconomiTcpServer(object):
                     pdb.set_trace()
                     self.postgres_connection.update_game_data(game.new_rate)
                     out = self.postgres_connection.get_game_data()
+
+                elif data['action'] == 'buy_value':
+                    sum_ = data['args']['sum']
+                    try:
+                        sum_ = int(sum_)
+                    except:
+                        return False
+                    id_ = data['args']['id']
+                    uid = data['args']['uid']
+                    game.players[game.players_id.index(uid)].buy_value(sum_, id_)
+
+                elif data['action'] == 'next_move_ready':
+                    uid = data['args']
+                    global ready_players
+                    if uid not in ready_players:
+                        ready_players.append(uid)
+                    if len(ready_players) == 4:
+                        game.next_move()
+                        return 1
+                    else:
+                        return 0
+
                 else:
                     out = "Error occurred"
 
@@ -298,6 +320,9 @@ class Player(object):
     def calculate_profit(self):
         return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id])
 
+    def calc_unit_profit(self):
+        return sum([unit.productivity for unit in self.units if unit.steps == 0])
+
     # Todo: нз что ты тут написал
     # Несмотря на то, что это не ordered dict они всё ещё хранятся в порядке добавления, вроде как!!!
     def get_values(self):
@@ -381,7 +406,7 @@ class Game(object):
         self.fund_move()
 
         # подсчет нового курса
-        self.rate_calc()
+        self.new_rate = self.rate_calc()
 
         # уменьшение кол-ва ходов до создания
         for p in self.players:
@@ -449,7 +474,8 @@ class Game(object):
 
     # сохранение настроек игры
     def save(self):
-        # TODO: idk it's 5 am I wanna do that but i'm fallin' asleep, so, 2morro
+        conn = PostgresConnection()
+        conn.update_game_data(self.new_rate)
         pass
 
     # определение стадии игры для создания соответсвующих юнитов
@@ -639,6 +665,7 @@ game = Game()
 
 server = TcpServer()
 server.run_()
+ready_players = []
 
 
 

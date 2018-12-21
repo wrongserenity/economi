@@ -98,15 +98,163 @@ class Connection(object):
     def get_game_data(self):
         return self.__request({'action': "get_game_data"})
 
+    def buy_value(self, sum_, id_, uid):
+        return self.__request({'action': 'buy_value', 'args': {'sum': sum_, 'id': id_, 'uid': uid}})
 
-# отвечает за нажатие на кнопку "buy" в поле покупки валюты
-class PlayerValueBuy:
-    def buy_press(self, event):
-        pass
+    def next_move_ready(self):
+        global self_id
+        return self.__request({'action': 'next_move_ready', 'args': self_id})
 
 
-# отвечает за все операции над окнами Market, Exchange и Units
-class MarketExchangeUnits(object):
+class InterfaceClicks(object):
+    def next_move(self, event):
+        global ready_
+        ready_ = True
+        self.next.setText('wait')
+
+        conn = Connection()
+
+        res = 0
+        while res != 1:
+            res = conn.next_move_ready()
+
+        self.general_out()
+        if player_opened:
+            self.player_data_out()
+        else:
+            self.players_data_out()
+
+    def oxmenu(self):
+        self.o1.mousePressEvent = self.o1
+        self.x1.mousePressEvent = self.x1
+        self.o2.mousePressEvent = self.o2
+        self.x2.mousePressEvent = self.x2
+        self.o3.mousePressEvent = self.o3
+        self.x3.mousePressEvent = self.x3
+        self.o4.mousePressEvent = self.o4
+        self.x4.mousePressEvent = self.x4
+
+        # market, echange, units
+        self.market.mousePressEvent = self.market_open
+        self.exchange.mousePressEvent = self.exchange_open
+        self.units.mousePressEvent = self.units_open
+
+        self.next.mousePressEvent = self.next_move
+
+        self.up.mousePressEvent = self.scroll_up
+        self.down.mousePressEvent = self.scroll_down
+
+    # основной вывод, присутствующий в каждом окне
+    def general_out(self):
+        global players_ids
+        global self_id
+
+        conn = Connection()
+        res = 0
+        while not res:
+            other = wait_players(player_start_data['id'], players_ids)
+            if other == "Full":
+                res = 1
+            else:
+                players_ids.append(other['id'])
+                players_data.append(other)
+                # do
+        self.data_ = conn.get_player_data(self_id)
+        self.data_.append(json.loads(conn.get_game_data()))
+
+        players_ids = [str(id_) for id_ in players_ids]
+        try:
+            players_ids.remove(self_id)
+        except:
+            pass
+        #
+        # for id_ in [str(id_) for id_ in players_data]:
+        #     if self.data_[3][id_]:
+        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}")\
+        #             .setText(str(self.data_[3][players_data[0]]))
+        #     else:
+        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}").set_
+
+        # вывод банка
+        if len(players_ids) > 0 and players_ids[0] in list(self.data_[3].keys()):
+            self.bank_player_1.setText()
+        else:
+            self.bank_player_1.setText('0')
+
+        if len(players_ids) > 1 and players_ids[0] in list(self.data_[3].keys()):
+            self.bank_player_2.setText(str(self.data_[3][players_ids[1]]))
+        else:
+            self.bank_player_2.setText('0')
+
+        if len(players_ids) > 2 and players_ids[0] in list(self.data_[3].keys()):
+            self.bank_player_3.setText(str(self.data_[3][players_ids[2]]))
+        else:
+            self.bank_player_3.setText('0')
+
+        # вывод rate, gdp и value
+        self_id = str(self_id)
+        # TODO: БОЛЬШОЙ КОСТЫЛЬ
+        # да нормас
+        self.data_[5] = self.data_[5][0]
+        self.rate.setText(str(float('{:.3f}'.format(self.data_[5][self_id]))))
+        self.gdp.setText(str(self.data_[4]))
+        self.player_value.setText(str(self.data_[3][self_id]))
+
+        # вывод fund
+        fund_temp = []
+        for id_ in players_ids:
+            if id_ in list(self.data_[3].keys()):
+                fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
+        fund = round(sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id])
+        self.player_fund.setText(str(fund))
+
+        # вывод unit profit
+        unit_profit = round(sum([unit['productivity_'] for unit in player_start_data['units']]))
+        self.unit.setText(str(unit_profit))
+
+    # вывод fund и имен других игроков
+    def players_data_out(self):
+        for i in range(len(players_ids)):
+            if str(players_data[i]['id']) == players_ids[0]:
+                self.player_1_fund.setText(str(
+                    round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
+                              if id_ in players_data[i]['value'].keys())
+                          )))
+                self.player_.setText(players_data[i]['name'])
+            if str(players_data[i]['id']) == players_ids[1]:
+                self.player_2_fund.setText(str(
+                    round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
+                              if id_ in players_data[i]['value'].keys())
+                          )))
+                self.player_.setText(players_data[i]['name'])
+            if str(players_data[i]['id']) == players_ids[2]:
+                self.player_3_fund.setText(str(
+                    round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
+                              if id_ in players_data[i]['value'].keys())
+                          )))
+                self.player_.setText(players_data[i]['name'])
+
+
+    # вывод данных игрока
+    def player_data_out(self):
+        global player_opened
+        global players_data
+        import pdb
+        pdb.set_trace()
+
+        for player_ in players_data:
+            if str(player_['id']) == player_opened:
+                self.player_open_country.setText(str(player_['country']))
+                self.player_open_gdp.setText(str(player_['gdp']))
+                if player_['units']:
+                    self.player_open_unit.setText(
+                        str(sum(u['productivity_'] for u in player_['units']))
+                    )
+                else:
+                    self.player_open_unit.setText('0')
+                self.player_open_rate.setText(str(float('{:.3f}'.format(self.data_[5][player_opened]))))
+                self.player_open_value.setText(str(player_['value'][player_opened]))
+
     gui_window_name = None
     # переменные, в которые надо подгружать информацию с сервака
     # при нажатии на Market / Exchange / Units справа в окне
@@ -289,7 +437,7 @@ class Background(QtWidgets.QMainWindow, background.Ui_BackGround):
 
 
 # окно только с меню игрока (нажатие на игрока слева сверху)
-class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExchangeUnits):
+class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, InterfaceClicks):
     def __init__(self, parent=None):
         super(PlayerMenu, self).__init__(parent)
         self.setupUi(self)
@@ -316,6 +464,9 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
 
         self.buy.mousePressEvent = self.buy_value
 
+        self.general_out()
+        self.player_data_out()
+
         global ready_
         if ready_:
             self.next.setText('wait')
@@ -325,14 +476,9 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
         conn = Connection()
         if self.value_buy.text():
             try:
-                conn.buy_value(int(self.value_buy.text()), player_opened)
+                conn.buy_value(int(self.value_buy.text()), player_opened, self_id)
             except Exception:
                 pass
-
-    def next_move(self, event):
-        global ready_
-        ready_ = True
-        self.next.setText('wait')
 
     def menu_open(self, event):
         self.pl_and_sr_menu = PlayerAndStandartMenu()
@@ -348,33 +494,16 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, MarketExcha
 
 
 # окно с меню игрока и обычным меню, которое открывается слева снизу
-class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlMenuSt, MarketExchangeUnits):
+class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlMenuSt, InterfaceClicks):
     def __init__(self, parent=None):
         super(PlayerAndStandartMenu, self).__init__(parent)
         self.setupUi(self)
 
         self.exit.mousePressEvent = self.close_cl
-        self.menu.mousePressEvent = self.menu_hide
-
+        self.hide.mousePressEvent = self.menu_hide
         self.player_open.mousePressEvent = self.player_cl
-
-        # market, echange, units
-        self.market.mousePressEvent = self.market_open
-        self.exchange.mousePressEvent = self.exchange_open
-        self.units.mousePressEvent = self.units_open
-
-        self.o1.mousePressEvent = self.o1
-        self.x1.mousePressEvent = self.x1
-        self.o2.mousePressEvent = self.o2
-        self.x2.mousePressEvent = self.x2
-        self.o3.mousePressEvent = self.o3
-        self.x3.mousePressEvent = self.x3
-        self.o4.mousePressEvent = self.o4
-        self.x4.mousePressEvent = self.x4
-
-        self.next.mousePressEvent = self.next_move
-
         self.buy.mousePressEvent = self.buy_value
+        self.oxmenu()
 
         global ready_
         if ready_:
@@ -388,11 +517,6 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
                 conn.buy_value(int(self.value_buy.text()), player_opened)
             except Exception:
                 pass
-
-    def next_move(self, event):
-        global ready_
-        ready_ = True
-        self.next.setText('wait')
 
     def player_cl(self, event):
         global player_opened
@@ -411,11 +535,9 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
 
 
 # обыное меню с кнопками exit и hide (скрыть меню)
-class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExchangeUnits):
+class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, InterfaceClicks):
     def __init__(self, parent=None):
         super(StandartMenu, self).__init__(parent)
-        import pdb
-        # pdb.set_trace()
         self.setupUi(self)
 
         self.exit.mousePressEvent = self.close_cl
@@ -423,35 +545,15 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, MarketExcha
         self.player_1.mousePressEvent = self.player_one
         self.player_2.mousePressEvent = self.player_two
         self.player_3.mousePressEvent = self.player_three
-
-        # market, echange, units
-        self.market.mousePressEvent = self.market_open
-        self.exchange.mousePressEvent = self.exchange_open
-        self.units.mousePressEvent = self.units_open
-
-        self.o1.mousePressEvent = self.o1
-        self.x1.mousePressEvent = self.x1
-        self.o2.mousePressEvent = self.o2
-        self.x2.mousePressEvent = self.x2
-        self.o3.mousePressEvent = self.o3
-        self.x3.mousePressEvent = self.x3
-        self.o4.mousePressEvent = self.o4
-        self.x4.mousePressEvent = self.x4
-
-        self.next.mousePressEvent = self.next_move
+        self.oxmenu()
 
         global ready_
         if ready_:
             self.next.setText('wait')
 
-    def next_move(self, event):
-        global ready_
-        ready_ = True
-        self.next.setText('wait')
-
     def player_one(self, event):
         global player_opened
-        player_opened = None
+        player_opened = 0
         self.player_open()
 
     def player_two(self, event):
@@ -488,26 +590,13 @@ def wait_players(my_id, cur):
 
 
 # основное окно без открытых меню
-class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
+class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, InterfaceClicks):
     def __init__(self, parent=None):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
-        global players_ids
-        global self_id
-        conn = Connection()
-
-        res = 0
-        while not res:
-            other = wait_players(player_start_data['id'], players_ids)
-            if other == "Full":
-                res = 1
-            else:
-                players_ids.append(other['id'])
-                players_data.append(other)
-                # do
-        self.data_ = conn.get_player_data(self_id)
-        self.data_.append(json.loads(conn.get_game_data()))
+        self.general_out()
+        self.players_data_out()
 
         # menu
         self.menu.mousePressEvent = self.menu_open
@@ -516,90 +605,28 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, MarketExchangeUnits):
         self.player_1.mousePressEvent = self.player_one
         self.player_2.mousePressEvent = self.player_two
         self.player_3.mousePressEvent = self.player_three
-
-        # market, echange, units
-        self.market.mousePressEvent = self.market_open
-        self.exchange.mousePressEvent = self.exchange_open
-        self.units.mousePressEvent = self.units_open
-
-        self.o1.mousePressEvent = self.o1
-        self.x1.mousePressEvent = self.x1
-        self.o2.mousePressEvent = self.o2
-        self.x2.mousePressEvent = self.x2
-        self.o3.mousePressEvent = self.o3
-        self.x3.mousePressEvent = self.x3
-        self.o4.mousePressEvent = self.o4
-        self.x4.mousePressEvent = self.x4
-
-        self.up.mousePressEvent = self.scroll_up
-        self.down.mousePressEvent = self.scroll_down
-
-        self.next.mousePressEvent = self.next_move
-
-        # вывод циферок
-        players_ids = [str(id_) for id_ in players_ids]
-        try:
-            players_ids.remove(self_id)
-        except:
-            pass
-        #
-        # for id_ in [str(id_) for id_ in players_data]:
-        #     if self.data_[3][id_]:
-        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}")\
-        #             .setText(str(self.data_[3][players_data[0]]))
-        #     else:
-        #         self.__getattribute__(f"bank_player_{id_ - int(players_data[0]) + 1}").set_
-
-        if len(players_ids) > 0 and players_ids[0] in list(self.data_[3].keys()):
-            self.bank_player_1.setText()
-        else:
-            self.bank_player_1.setText('0')
-
-        if len(players_ids) > 1 and players_ids[0] in list(self.data_[3].keys()):
-            self.bank_player_2.setText(str(self.data_[3][players_ids[1]]))
-        else:
-            self.bank_player_2.setText('0')
-
-        if len(players_ids) > 2 and players_ids[0] in list(self.data_[3].keys()):
-            self.bank_player_3.setText(str(self.data_[3][players_ids[2]]))
-        else:
-            self.bank_player_3.setText('0')
-
-        self_id = str(self_id)
-        # TODO: БОЛЬШОЙ КОСТЫЛЬ
-        self.data_[5] = self.data_[5][0]
-        self.rate.setText(str(self.data_[5][self_id]))
-        self.gdp.setText(str(self.data_[4]))
-        self.player_value.setText(str(self.data_[3][self_id]))
-
-        fund_temp = []
-        for id_ in players_ids:
-            if id_ in list(self.data_[3].keys()):
-                fund_temp.append(self.data_[3][id_] * self.data_[5][id_])
-        import pdb
-        pdb.set_trace()
-        fund = sum(fund_temp) + self.data_[3][self_id] * self.data_[5][self_id]
-        self.player_fund.setText(str(fund))
-
-        unit_profit = sum([unit['productivity_'] for unit in player_start_data['units']])
-        self.unit.setText(str(unit_profit))
+        self.oxmenu()
 
         global ready_
         if ready_:
             self.next.setText('wait')
 
-    def next_move(self, event):
-        global ready_
-        ready_ = True
-        self.next.setText('wait')
-
     def player_one(self, event):
+        global player_opened
+        global players_ids
+        player_opened = players_ids[0]
         self.player_open()
 
     def player_two(self, event):
+        global player_opened
+        global players_ids
+        player_opened = players_ids[1]
         self.player_open()
 
     def player_three(self, event):
+        global player_opened
+        global players_ids
+        player_opened = players_ids[2]
         self.player_open()
 
     # здесь так же надо продумать, как можно сделать так, чтобы при нажатии,
