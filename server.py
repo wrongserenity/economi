@@ -140,7 +140,8 @@ class EconomiTcpServer(object):
                     uid = data['args']['uid']
                     import pdb
                     pdb.set_trace()
-                    game.players[game.players_id.index(uid)].buy_value(sum_, id_)
+                    # TODO: ЕЩЁ КОСТЫЛЬ
+                    game.players[game.players_id.index(int(uid))].buy_value(sum_, id_)
 
                 elif data['action'] == 'next_move_ready':
                     uid = data['args']
