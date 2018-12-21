@@ -128,8 +128,6 @@ class EconomiTcpServer(object):
                     out = self.get_player_data(data["args"]["uid"])
 
                 elif data['action'] == 'get_game_data':
-                    import pdb
-                    pdb.set_trace()
                     self.postgres_connection.update_game_data(game.new_rate)
                     out = self.postgres_connection.get_game_data()
 
@@ -261,7 +259,6 @@ class Player(object):
             for unit_data in units_data:
                 self.units.append(Unit(data=unit_data))
 
-
     def to_dict(self):
         dict_ = self.__dict__
         dict_['units'] = [unit.to_dict() for unit in self.units]
@@ -274,7 +271,6 @@ class Player(object):
 
     def get_default_val(self, uid, country):
         return {uid: self.country_st[country][0]}, self.country_st[country][1]
-
 
     # удаление юнита при уничтожении
     def remove_unit(self, unit):
@@ -588,76 +584,6 @@ class Exchange(UnitSell):
                 self.seller[i] = None
 
 
-'''
-для вывода информации юнитов в окне у игрока надо отправлять соответствующие
-данные из его класса (объекты класса Unit лежат в списке Player.units)
-'''
-
-'''
-# пусть словари с данными игроков - это следующий список:
-lst_player_data = [{'country': 'Russia', 'name': 'First'},
-                   {'country': 'Sweden', 'name': 'Second'},
-                   {'country': 'Russia', 'name': 'Third'},
-                   {'country': 'China', 'name': 'Fourth'}]
-
-players = []
-for i in range(len(lst_player_data)):
-    country = lst_player_data[i]['country']
-    name = lst_player_data[i]['name']
-    start_value = Player.country_st[country][0]
-    start_gdp = Player.country_st[country][1]
-    # здесь же определяем начальные значения для стран игроков
-    # основываясь на их выбранной стране
-
-    # Todo: сюда надо передать айдишник игрока
-    id_ = None
-    players.append(Player(id_, name, country, start_value, start_gdp))
-'''
-'''
-game = Game(players)
-
-
-units = []
-id_ = None
-cost = unit_coef[1]['cost']
-steps = unit_coef[1]['steps']
-prod = unit_coef[1]['prod']
-level = unit_coef[1]['level']
-unit = Unit(id_, cost, steps, prod, level)
-game.players[0].units.append(unit)
-
-
-print(game.__dict__)
-print(game.players[0].__dict__)
-print(game.players[0].units[0].__dict__)
-game.players[0].units[0].lvl_up()
-game.players[0].units[0].lvl_up()
-game.players[0].units[0].lvl_up()
-
-print(game.players[0].units[0].__dict__)
-print(game.market.__dict__)
-print(game.exchange.__dict__)
-
-game.next_move()
-game.next_move()
-
-print('--------------')
-print(game.__dict__)
-print(game.players[0].__dict__)
-print(game.players[0].units[0].__dict__)
-print(game.players[0].units[0].__dict__)
-print(game.market.__dict__)
-print(game.exchange.__dict__)
-
-print('------------')
-game.players[0].sell_unit(game.players[0].units[0])
-print(game.exchange.__dict__)
-game.players[1].value[game.players_id[1]] = 100000
-print('----')
-print(game.players[1].units)
-game.players[1].buy_unit(0, game.exchange)
-print(game.players[1].units)
-'''
 pg_conn = PostgresConnection()
 mongo_conn = MongoConnection()
 
@@ -666,8 +592,3 @@ game = Game()
 server = TcpServer()
 server.run_()
 ready_players = []
-
-
-
-
-

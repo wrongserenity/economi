@@ -239,9 +239,6 @@ class InterfaceClicks(object):
     def player_data_out(self):
         global player_opened
         global players_data
-        import pdb
-        pdb.set_trace()
-
         for player_ in players_data:
             if str(player_['id']) == player_opened:
                 self.player_open_country.setText(str(player_['country']))
