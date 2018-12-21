@@ -442,28 +442,11 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, InterfaceCl
         super(PlayerMenu, self).__init__(parent)
         self.setupUi(self)
 
-        # закрытие меню игрока и открытие обычного меню
         self.menu.mousePressEvent = self.menu_open
-        # self.exit.mousePressEvent = self.player_cl
-
-        # market, exchange, units
-        self.market.mousePressEvent = self.market_open
-        self.exchange.mousePressEvent = self.exchange_open
-        self.units.mousePressEvent = self.units_open
-
-        self.o1.mousePressEvent = self.o1
-        self.x1.mousePressEvent = self.x1
-        self.o2.mousePressEvent = self.o2
-        self.x2.mousePressEvent = self.x2
-        self.o3.mousePressEvent = self.o3
-        self.x3.mousePressEvent = self.x3
-        self.o4.mousePressEvent = self.o4
-        self.x4.mousePressEvent = self.x4
-
-        self.next.mousePressEvent = self.next_move
-
+        self.exit.mousePressEvent = self.player_cl
         self.buy.mousePressEvent = self.buy_value
 
+        self.oxmenu()
         self.general_out()
         self.player_data_out()
 
@@ -503,7 +486,10 @@ class PlayerAndStandartMenu(QtWidgets.QMainWindow, g_pl_menu_plus_st_menu.Ui_PlM
         self.hide.mousePressEvent = self.menu_hide
         self.player_open.mousePressEvent = self.player_cl
         self.buy.mousePressEvent = self.buy_value
+
         self.oxmenu()
+        self.general_out()
+        self.player_data_out()
 
         global ready_
         if ready_:
@@ -545,7 +531,10 @@ class StandartMenu(QtWidgets.QMainWindow, g_st_menu.Ui_StandartMenu, InterfaceCl
         self.player_1.mousePressEvent = self.player_one
         self.player_2.mousePressEvent = self.player_two
         self.player_3.mousePressEvent = self.player_three
+
         self.oxmenu()
+        self.general_out()
+        self.players_data_out()
 
         global ready_
         if ready_:
@@ -595,9 +584,6 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, InterfaceClicks):
         super(Gui, self).__init__(parent)
         self.setupUi(self)
 
-        self.general_out()
-        self.players_data_out()
-
         # menu
         self.menu.mousePressEvent = self.menu_open
 
@@ -606,6 +592,9 @@ class Gui(QtWidgets.QMainWindow, g.Ui_MainGUI, InterfaceClicks):
         self.player_2.mousePressEvent = self.player_two
         self.player_3.mousePressEvent = self.player_three
         self.oxmenu()
+
+        self.general_out()
+        self.players_data_out()
 
         global ready_
         if ready_:
