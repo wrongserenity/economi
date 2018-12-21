@@ -13,7 +13,7 @@ import os
 import json
 import time
 import logging
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 
 # тут хранятся данные об игрока, отправляемы на сервер, когда
@@ -23,17 +23,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 player_start_data = {}
 players_ids = []
 players_data = []
-
 window_opened = 'market'
 player_opened = None
 self_id = 0
-
-
 ready_ = False
-
-
-def update():
-    pass
 
 
 class Connection(object):
@@ -240,6 +233,11 @@ class InterfaceClicks(object):
         global players_data
         for player_ in players_data:
             if str(player_['id']) == player_opened:
+                self.player_open_fund.setText(str(
+                    round(sum(player_['value'][id_] * self.data_[5][id_] for id_ in players_ids
+                              if id_ in player_['value'].keys())
+                          )))
+                self.player_open.setText(player_['name'])
                 self.player_open_country.setText(str(player_['country']))
                 self.player_open_gdp.setText(str(player_['gdp']))
                 if player_['units']:
@@ -750,7 +748,6 @@ class MainMenu(QtWidgets.QMainWindow, g_main_menu.Ui_MainMenu):
             conn = Connection()
             data = conn.get_user_data(self._id)
             player_start_data = dict(**data)
-            # здесь надо открывать уже сразу окно игры и в брать данные с сервака (имя и странуб и т.д)
             self.gui = Gui()
             self.gui.showFullScreen()
         else:
