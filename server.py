@@ -138,6 +138,8 @@ class EconomiTcpServer(object):
                         return False
                     id_ = data['args']['id']
                     uid = data['args']['uid']
+                    import pdb
+                    pdb.set_trace()
                     game.players[game.players_id.index(uid)].buy_value(sum_, id_)
 
                 elif data['action'] == 'next_move_ready':
