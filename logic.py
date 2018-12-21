@@ -220,20 +220,19 @@ class InterfaceClicks(object):
                     round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
                               if id_ in players_data[i]['value'].keys())
                           )))
-                self.player_.setText(players_data[i]['name'])
+                self.player_1.setText(players_data[i]['name'])
             if str(players_data[i]['id']) == players_ids[1]:
                 self.player_2_fund.setText(str(
                     round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
                               if id_ in players_data[i]['value'].keys())
                           )))
-                self.player_.setText(players_data[i]['name'])
+                self.player_2.setText(players_data[i]['name'])
             if str(players_data[i]['id']) == players_ids[2]:
                 self.player_3_fund.setText(str(
                     round(sum(players_data[i]['value'][id_] * self.data_[5][id_] for id_ in players_ids
                               if id_ in players_data[i]['value'].keys())
                           )))
-                self.player_.setText(players_data[i]['name'])
-
+                self.player_3.setText(players_data[i]['name'])
 
     # вывод данных игрока
     def player_data_out(self):
@@ -442,6 +441,9 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, InterfaceCl
         self.menu.mousePressEvent = self.menu_open
         self.exit.mousePressEvent = self.player_cl
         self.buy.mousePressEvent = self.buy_value
+
+        import pdb
+        pdb.set_trace()
 
         self.oxmenu()
         self.general_out()

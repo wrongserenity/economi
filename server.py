@@ -1,4 +1,3 @@
-
 import tornado
 import socket
 import tornado.gen
@@ -11,8 +10,6 @@ import postgres
 from itertools import count
 import json
 
-import aiohttp
-import config
 from postgres import PostgresConnection
 from mongo import MongoConnection
 from unit import unit_coef, level_coef, pages, min_value_percent
@@ -20,6 +17,8 @@ import copy
 # from for_server import game, market, exchange
 
 import random
+
+ready_players = []
 
 
 class EconomiTcpServer(object):
@@ -591,4 +590,3 @@ game = Game()
 
 server = TcpServer()
 server.run_()
-ready_players = []
