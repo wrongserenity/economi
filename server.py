@@ -453,7 +453,7 @@ class Game(object):
         for id_i in self.players_id:
             values.update({id_i: 0})
             for p in self.players:
-                if p.value[id_i]:
+                if id_i in p.value.keys():
                     values[id_i] += p.value[id_i]
                     all_ += p.value[id_i]
 
