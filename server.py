@@ -81,8 +81,9 @@ class EconomiTcpServer(object):
     @staticmethod
     def format_(obj, out=False):
         print(str(obj))
-        if "GET" in obj.decode("utf-8"):
-            return {}
+        if not out and isinstance(obj.decode("utf-8"), str):
+            if "GET" in obj.decode("utf-8"):
+                return {}
         return bytes(f'{json.dumps(obj)}\n', "utf-8") if out else json.loads(obj.decode("utf-8"))
 
     @tornado.gen.coroutine
