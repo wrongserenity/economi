@@ -269,7 +269,7 @@ class Player(object):
 
     def save(self):
         dict_ = copy.deepcopy(self.__dict__)
-        dict_.pop("unit")
+        dict_.pop("units")
         pg_conn.update_data(dict_)
 
     def get_default_val(self, uid, country):
