@@ -81,7 +81,7 @@ class PostgresConnection:
             import pdb
             pdb.set_trace()
             cur.execute("UPDATE users_table SET name = %s, country = %s, value = %s, gdp = %s WHERE user_id = %s",
-                        (*[val for val in user_dict.values() if not isinstance(val, dict)], id_))
+                        (*[val if not isinstance(val, dict) else json.dumps(val) for val in user_dict.values() ], id_))
 
 
 
