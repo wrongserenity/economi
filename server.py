@@ -153,6 +153,7 @@ class EconomiTcpServer(object):
                     if len(ready_players) == 4:
                         game.next_move()
                         out = "1"
+                        ready_players = []
                     else:
                         out = "0"
 
@@ -320,6 +321,8 @@ class Player(object):
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
+        import pdb
+        pdb.set_trace()
         return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id])
 
     def calc_unit_profit(self):
@@ -429,8 +432,6 @@ class Game(object):
 
         # сохранения
         # Todo: надо добавить сохранение сосотояния объектов market и exchange
-        import pdb
-        pdb.set_trace()
         for p in self.players:
             p.save()
         self.save()
