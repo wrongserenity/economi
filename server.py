@@ -112,6 +112,8 @@ class EconomiTcpServer(object):
                     out = self.set_user_data(data['args']['user_dict'])
 
                 elif data['action'] == "get_other":
+                    import pdb
+                    pdb.set_trace()
                     data = [player.to_dict() for player in game.players if player.id not in [data['args']['id'],
                                                                                              *data['args']['other']]]
                     out = data
@@ -155,10 +157,10 @@ class EconomiTcpServer(object):
                     if uid not in ready_players:
                         ready_players.append(uid)
                     if len(ready_players) == 4:
-                        game.next_move()
                         out = "1"
                         get_next_count += 1
                         if get_next_count == 4:
+                            game.next_move()
                             ready_players = []
                             get_next_count = 0
                     else:
