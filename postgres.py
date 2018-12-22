@@ -2,6 +2,12 @@ import psycopg2 as pg
 import logging
 import json
 
+country_st = {'Russia': [700, 1.09],
+              'USA': [400, 1.2],
+              'Germany': [550, 1.12],
+              'China': [300, 1.25],
+              'Sweden': [500, 1.17]}
+
 # TODO: add try:.. except... wrappers
 class PostgresConnection:
     def __init__(self, configs="dbname='postgres' user='postgres' host='localhost' password='12345678'"):
@@ -68,7 +74,11 @@ class PostgresConnection:
         with self.__cursor() as cur:
             val = user_dict['value']
             user_dict['value'] = json.dumps({'0': 1})
-            cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict['country', user_dict['name'], user_dict['gdp'], json.dumps(user_dict['value'])]))
+            if 'gdp' not in user_dict.keys():
+                gdp = country_st[user_dict['name']][1]
+            import pdb
+            pdb.set_trace()
+            cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict['country'], user_dict['name'], gdp, user_dict['value']))
             id_ = cur.fetchone()[0]
             cur.execute('UPDATE users_table SET value = %s WHERE id = %s',
                         (json.dumps({id_: val}), id_))
@@ -78,8 +88,6 @@ class PostgresConnection:
     def update_data(self, user_dict):
         with self.__cursor() as cur:
             id_ = user_dict.pop("id")
-            import pdb
-            pdb.set_trace()
             cur.execute("UPDATE users_table SET name = %s, country = %s, gdp = %s, value = %s WHERE id = %s",
                         (*[val if not isinstance(val, dict) else json.dumps(val) for val in user_dict.values() ], id_))
 
