@@ -75,7 +75,7 @@ class PostgresConnection:
             val = user_dict['value']
             user_dict['value'] = json.dumps({'0': 1})
             if 'gdp' not in user_dict.keys():
-                gdp = country_st[user_dict['name']][1]
+                gdp = country_st[user_dict['country']][1]
             import pdb
             pdb.set_trace()
             cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict['country'], user_dict['name'], gdp, user_dict['value']))
