@@ -138,8 +138,6 @@ class EconomiTcpServer(object):
                         return False
                     id_ = data['args']['id']
                     uid = data['args']['uid']
-                    import pdb
-                    pdb.set_trace()
                     # TODO: ЕЩЁ КОСТЫЛЬ
                     game.players[game.players_id.index(int(uid))].buy_value(sum_, int(id_))
                     out = "True"

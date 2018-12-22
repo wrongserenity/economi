@@ -439,9 +439,6 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, InterfaceCl
         super(PlayerMenu, self).__init__(parent)
         self.setupUi(self)
 
-        import pdb
-        pdb.set_trace()
-
         self.menu.mousePressEvent = self.menu_open
         self.buy.mousePressEvent = self.buy_value
         self.player_open.mousePressEvent = self.player_cl
