@@ -68,7 +68,7 @@ class PostgresConnection:
         with self.__cursor() as cur:
             val = user_dict['value']
             user_dict['value'] = json.dumps({'0': 1})
-            cur.execute("INSERT INTO users_table(country, name, value, gdp) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict.values()))
+            cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict.values()))
             id_ = cur.fetchone()[0]
             cur.execute('UPDATE users_table SET value = %s WHERE id = %s',
                         (json.dumps({id_: val}), id_))
@@ -80,7 +80,7 @@ class PostgresConnection:
             id_ = user_dict.pop("id")
             import pdb
             pdb.set_trace()
-            cur.execute("UPDATE users_table SET name = %s, country = %s, value = %s, gdp = %s WHERE id = %s",
+            cur.execute("UPDATE users_table SET name = %s, country = %s, gdp = %s, value = %s WHERE id = %s",
                         (*[val if not isinstance(val, dict) else json.dumps(val) for val in user_dict.values() ], id_))
 
 
