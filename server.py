@@ -467,7 +467,7 @@ class Game(object):
                     all_ += p.value[id_i]
 
         for id_id in self.players_id:
-            rate.update({id_id: round(values[id_id] / all_)})
+            rate.update({id_id: values[id_id] / all_})
 
         return rate
 
