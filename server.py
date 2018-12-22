@@ -148,6 +148,8 @@ class EconomiTcpServer(object):
 
                 elif data['action'] == 'next_move_ready':
                     uid = data['args']
+                    import pdb
+                    pdb.set_trace()
                     global ready_players
                     global get_next_count
                     if uid not in ready_players:
@@ -326,8 +328,6 @@ class Player(object):
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
-        import pdb
-        pdb.set_trace()
         return sum([unit.productivity for unit in self.units if unit.steps == 0]) + (self.gdp * self.value[self.id])
 
     def calc_unit_profit(self):
@@ -483,7 +483,7 @@ class Game(object):
     # прибавлене в фонды в конце хода
     def fund_move(self):
         for p in self.players:
-            p.value[p.id] += p.calculate_profit()
+            p.value[p.id] = p.calculate_profit()
 
     # сохранение настроек игры
     def save(self):
