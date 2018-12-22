@@ -465,7 +465,8 @@ class Game(object):
                 if id_i in p.value.keys():
                     values[id_i] += p.value[id_i]
                     all_ += p.value[id_i]
-
+                    
+        all_ /= len(self.players_id)
         for id_id in self.players_id:
             rate.update({id_id: values[id_id] / all_})
 
