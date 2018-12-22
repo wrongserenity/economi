@@ -145,14 +145,26 @@ class InterfaceClicks(object):
 
         conn = Connection()
         res = 0
-        while not res:
-            other = wait_players(player_start_data['id'], players_ids)
-            if other == "Full":
-                res = 1
-            else:
-                players_ids.append(other['id'])
-                players_data.append(other)
-                # do
+        data = conn.get_other(player_start_data['id'], [])
+
+        import pdb
+        pdb.set_trace()
+
+        for user in data:
+            for pl in players_data:
+                if pl['id'] == user['id']:
+                    pl.update(user)
+                    break
+
+
+        # while not res:
+        #     other = wait_players(player_start_data['id'], players_ids)
+        #     if other == "Full":
+        #         res = 1
+        #     else:
+        #         players_ids.append(other['id'])
+        #         players_data.append(other)
+        #         # do
         self.data_ = conn.get_player_data(self_id)
         self.data_.append(json.loads(conn.get_game_data()))
 
@@ -662,6 +674,17 @@ class EnterName(QtWidgets.QMainWindow, g_enter_name.Ui_EnterName):
             self_id = str(self.dict_['id'])
             global player_start_data
             player_start_data = {"units": [], **self.dict_}
+
+            res = 0
+            while not res:
+                other = wait_players(player_start_data['id'], players_ids)
+                if other == "Full":
+                    res = 1
+                else:
+                    players_ids.append(other['id'])
+                    players_data.append(other)
+                    # do
+
             self.gui = Gui()
             self.gui.showFullScreen()
             self.close()
