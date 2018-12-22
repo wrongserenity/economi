@@ -443,6 +443,7 @@ class PlayerMenu(QtWidgets.QMainWindow, g_player_menu.Ui_PlayerMenu, InterfaceCl
 
         self.menu.mousePressEvent = self.menu_open
         self.buy.mousePressEvent = self.buy_value
+        self.player_open.mousePressEvent = self.player_cl
 
         self.oxmenu()
         self.general_out()
