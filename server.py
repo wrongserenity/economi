@@ -19,6 +19,7 @@ import copy
 import random
 
 ready_players = []
+get_next_count = 0
 
 
 class EconomiTcpServer(object):
@@ -148,12 +149,16 @@ class EconomiTcpServer(object):
                 elif data['action'] == 'next_move_ready':
                     uid = data['args']
                     global ready_players
+                    global get_next_count
                     if uid not in ready_players:
                         ready_players.append(uid)
                     if len(ready_players) == 4:
                         game.next_move()
                         out = "1"
-                        ready_players = []
+                        get_next_count += 1
+                        if get_next_count == 4:
+                            ready_players = []
+                            get_next_count = 0
                     else:
                         out = "0"
 
