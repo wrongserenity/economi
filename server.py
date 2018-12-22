@@ -142,6 +142,7 @@ class EconomiTcpServer(object):
                     pdb.set_trace()
                     # TODO: ЕЩЁ КОСТЫЛЬ
                     game.players[game.players_id.index(int(uid))].buy_value(sum_, int(id_))
+                    out = "True"
 
                 elif data['action'] == 'next_move_ready':
                     uid = data['args']
@@ -150,9 +151,9 @@ class EconomiTcpServer(object):
                         ready_players.append(uid)
                     if len(ready_players) == 4:
                         game.next_move()
-                        return 1
+                        out = "1"
                     else:
-                        return 0
+                        out = "0"
 
                 else:
                     out = "Error occurred"
