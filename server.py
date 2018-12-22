@@ -310,6 +310,8 @@ class Player(object):
 
     def buy_value(self, value, id_):
         seller = game.players[game.players_id.index(id_)]
+        if seller.id not in self.value.keys():
+            self.value.update({seller.id: 0})
         self.value[seller.id] += value
         self.value[self.id] -= round(value * game.new_rate[seller.id] / game.new_rate[self.id])
         # seller.value[seller.id] -= value
