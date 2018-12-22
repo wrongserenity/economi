@@ -112,8 +112,6 @@ class EconomiTcpServer(object):
                     out = self.set_user_data(data['args']['user_dict'])
 
                 elif data['action'] == "get_other":
-                    import pdb
-                    pdb.set_trace()
                     data = [player.to_dict() for player in game.players if player.id not in [data['args']['id'],
                                                                                              *data['args']['other']]]
                     out = data
@@ -150,8 +148,6 @@ class EconomiTcpServer(object):
 
                 elif data['action'] == 'next_move_ready':
                     uid = data['args']
-                    import pdb
-                    pdb.set_trace()
                     global ready_players
                     global get_next_count
                     if uid not in ready_players:

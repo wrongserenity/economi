@@ -23,8 +23,8 @@ class PostgresConnection:
 
     def update_game_data(self, rates):
         with self.__cursor() as cur:
-            import pdb
-            pdb.set_trace()
+            # import pdb
+            # pdb.set_trace()
             cur.execute("SELECT * FROM game_table")
             if cur.fetchone():
                 # TODO: Если не работает, юзай ' одинарные кавычки

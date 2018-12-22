@@ -83,6 +83,8 @@ class Connection(object):
         return self.__request({"action": "get_uid"})
 
     def get_player_data(self, uid):
+        import pdb
+        pdb.set_trace()
         return self.__request({"action": "get_player_data", "args": {"uid": uid}})
 
     def __request(self, req):
@@ -147,15 +149,11 @@ class InterfaceClicks(object):
         res = 0
         data = conn.get_other(player_start_data['id'], [])
 
-        import pdb
-        pdb.set_trace()
-
         for user in data:
             for pl in players_data:
                 if pl['id'] == user['id']:
                     pl.update(user)
                     break
-
 
         # while not res:
         #     other = wait_players(player_start_data['id'], players_ids)
@@ -165,6 +163,7 @@ class InterfaceClicks(object):
         #         players_ids.append(other['id'])
         #         players_data.append(other)
         #         # do
+
         self.data_ = conn.get_player_data(self_id)
         self.data_.append(json.loads(conn.get_game_data()))
 
