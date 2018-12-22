@@ -110,6 +110,7 @@ class InterfaceClicks(object):
         res = 0
         while res != 1:
             res = int(conn.next_move_ready())
+            time.sleep(5)
 
         self.general_out()
         if player_opened:

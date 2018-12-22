@@ -409,6 +409,7 @@ class Game(object):
         # подсчет нового курса
         self.new_rate = self.rate_calc()
 
+        '''
         # уменьшение кол-ва ходов до создания
         for p in self.players:
             for u in p.units:
@@ -418,11 +419,12 @@ class Game(object):
         # уменьшения кол-ва ходов для уничтожения юнитов в объекстах
         # market и exchange
         # и сразу же проверка на непригодных
+        
         for who in [self.market, self.exchange]:
             for i in range(len(who.time_exist)):
                 who.time_exist[i] -= 1
             who.check()
-
+        '''
 
         # сохранения
         # Todo: надо добавить сохранение сосотояния объектов market и exchange
