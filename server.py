@@ -312,7 +312,7 @@ class Player(object):
         seller = game.players[game.players_id.index(id_)]
         self.value[seller.id] += value
         self.value[self.id] -= round(value * game.new_rate[seller.id] / game.new_rate[self.id])
-        seller.value[seller.id] -= value
+        # seller.value[seller.id] -= value
 
     # расчет прибыли в конце хода
     def calculate_profit(self):
