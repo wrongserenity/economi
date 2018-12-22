@@ -74,11 +74,7 @@ class PostgresConnection:
         with self.__cursor() as cur:
             val = user_dict['value']
             user_dict['value'] = json.dumps({'0': 1})
-            if 'gdp' not in user_dict.keys():
-                gdp = country_st[user_dict['country']][1]
-            import pdb
-            pdb.set_trace()
-            cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict['country'], user_dict['name'], gdp, user_dict['value']))
+            cur.execute("INSERT INTO users_table(country, name, gdp, value) VALUES (%s, %s, %s, %s) RETURNING id", tuple(user_dict['country'], user_dict['name'], user_dict['gdp'], user_dict['value']))
             id_ = cur.fetchone()[0]
             cur.execute('UPDATE users_table SET value = %s WHERE id = %s',
                         (json.dumps({id_: val}), id_))
