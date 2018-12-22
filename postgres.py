@@ -2,11 +2,6 @@ import psycopg2 as pg
 import logging
 import json
 
-country_st = {'Russia': [700, 1.09],
-              'USA': [400, 1.2],
-              'Germany': [550, 1.12],
-              'China': [300, 1.25],
-              'Sweden': [500, 1.17]}
 
 # TODO: add try:.. except... wrappers
 class PostgresConnection:
