@@ -1,7 +1,12 @@
 # Ecónomi
- Economic client/server game, based on PyQt + Twisted
+ Business simulation client/server game, based on PyQt + Twisted
+
 ## Gameplay
-- Грабим корованы
+- Build economic strategy for your own country
+- Buy units increasing your gain 
+- Sell upgraded units or exchange them
+- Manage your rate
+- Try to get the benefits from bank system
  
 ## Interface
 ![Interface](https://github.com/wrongserenity/project/blob/master/interface.png)
@@ -13,31 +18,3 @@
 
 ## Client
 - `PyQt for creating design`
-
-# Stages:
-- [x] Create visual layout of UI
-- [x] Write `README.md`
-- [x] Install and configure databases on remote vps
-- [ ] Define coding/io standarts for requests and responses
-- [ ] Create async web server
-- [ ] Write comments
-- [ ] Write tests for web server
-- [ ] Write game functional
-- [ ] Tests & comments
-- [ ] Create UI in PyQt Designer based on layout
-- [ ] Write game client 
-- [ ] Create some docs and comment `*.py` files
-- [ ] Finish `Backend`
-- [ ] Finish `Client`
-- [ ] Finish documentation
-
-# Todo:
-- #### Define io standarts for webserver:
-- #### Create `AsyncServer` class, which contains:
-  - `funcs for handling requests`
-# Done:
-- #### Nothing
-
-
-# Architecture(v0.1):
-- `To be done...`
